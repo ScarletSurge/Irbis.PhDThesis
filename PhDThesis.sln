@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Math", "Math", "{D43D824A-9848-476F-9C82-05AA5A586F53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HypergraphConstructor", "HypergraphConstructor", "{BDF7E47E-08BD-4631-AB70-AC8F4ECC3F4D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encryptor", "Encryptor", "{904E791A-ED08-47EB-8286-E98C6EDE4D14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.HypergraphConstructor.Launcher.App", "PhDThesis.HypergraphConstructor.Launcher.App\PhDThesis.HypergraphConstructor.Launcher.App.csproj", "{A22CA700-0A26-4D28-B89C-194DA3788A9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Encryptor.Launcher.App", "PhDThesis.Encryptor.Launcher.App\PhDThesis.Encryptor.Launcher.App.csproj", "{59857CB9-5C27-464F-A620-C11E70E2233A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A22CA700-0A26-4D28-B89C-194DA3788A9F} = {BDF7E47E-08BD-4631-AB70-AC8F4ECC3F4D}
+		{59857CB9-5C27-464F-A620-C11E70E2233A} = {904E791A-ED08-47EB-8286-E98C6EDE4D14}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59857CB9-5C27-464F-A620-C11E70E2233A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59857CB9-5C27-464F-A620-C11E70E2233A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59857CB9-5C27-464F-A620-C11E70E2233A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59857CB9-5C27-464F-A620-C11E70E2233A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
