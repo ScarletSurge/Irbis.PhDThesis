@@ -1,23 +1,24 @@
 ﻿using System.Windows;
 
-namespace PhDThesis.Encryptor.Launcher.App.Views
+namespace PhDThesis.Encryptor.Launcher.App.Views;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow
+    : Window
 {
     
+    #region Constructors
+    
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// 
     /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        
-        #region Constructors
-        
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-        
-        #endregion
-        
+        InitializeComponent();
     }
+    
+    #endregion
     
 }

@@ -10,6 +10,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.HypergraphConstru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Encryptor.Launcher.App", "PhDThesis.Encryptor.Launcher.App\PhDThesis.Encryptor.Launcher.App.csproj", "{59857CB9-5C27-464F-A620-C11E70E2233A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Math.Domain", "PhDThesis.Math.Domain\PhDThesis.Math.Domain.csproj", "{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Domain.Extensions", "PhDThesis.Domain.Extensions\PhDThesis.Domain.Extensions.csproj", "{937B89B3-2C3C-417B-A445-18833E9BA31C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Math.Test", "PhDThesis.Math.Test\PhDThesis.Math.Test.csproj", "{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy", "PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy.csproj", "{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction", "PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj", "{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{D03A64E5-62CE-4D7D-98A9-41EBFD94E523}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{98AEDC14-A4B3-4383-ADFB-6A21B75454FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +32,11 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A22CA700-0A26-4D28-B89C-194DA3788A9F} = {BDF7E47E-08BD-4631-AB70-AC8F4ECC3F4D}
 		{59857CB9-5C27-464F-A620-C11E70E2233A} = {904E791A-ED08-47EB-8286-E98C6EDE4D14}
+		{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6} = {D43D824A-9848-476F-9C82-05AA5A586F53}
+		{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA} = {D43D824A-9848-476F-9C82-05AA5A586F53}
+		{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4} = {D43D824A-9848-476F-9C82-05AA5A586F53}
+		{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9} = {D43D824A-9848-476F-9C82-05AA5A586F53}
+		{937B89B3-2C3C-417B-A445-18833E9BA31C} = {98AEDC14-A4B3-4383-ADFB-6A21B75454FA}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -28,5 +47,25 @@ Global
 		{59857CB9-5C27-464F-A620-C11E70E2233A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59857CB9-5C27-464F-A620-C11E70E2233A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59857CB9-5C27-464F-A620-C11E70E2233A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{937B89B3-2C3C-417B-A445-18833E9BA31C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{937B89B3-2C3C-417B-A445-18833E9BA31C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{937B89B3-2C3C-417B-A445-18833E9BA31C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{937B89B3-2C3C-417B-A445-18833E9BA31C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

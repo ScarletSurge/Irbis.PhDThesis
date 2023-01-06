@@ -1,14 +1,13 @@
 ﻿using System.Windows;
 
-namespace PhDThesis.HypergraphConstructor.Launcher.App
+namespace PhDThesis.HypergraphConstructor.Launcher.App;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
     
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        
-    }
+    
     
 }
