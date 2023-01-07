@@ -18,7 +18,7 @@ public sealed class VerticesDegreesVector
     public VerticesDegreesVector(
         params uint[] verticesDegrees)
     {
-        _verticesDegrees = verticesDegrees.ToArray();
+        _verticesDegrees = verticesDegrees?.ToArray() ?? THROW ;
     }
 
 }

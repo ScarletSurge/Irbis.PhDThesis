@@ -58,19 +58,9 @@ public sealed class HomogenousHypergraph
         
         _simplices = new byte[(ulong)simplicesMaxCount / 8];
         
-        /*foreach (var simplexVertex in simplicesVertices ?? Enumerable.Empty<IOrderedEnumerable<int>>())
+        foreach (var simplexVertex in simplicesVertices ?? Enumerable.Empty<IOrderedEnumerable<int>>())
         {
             this[simplexVertex] = true;
-        }*/
-        
-        var randomSource = new Random();
-
-        for (var i = 0; i < SimplicesMaxCount; i++)
-        {
-            if (randomSource.Next(2) == 0)
-            {
-                _simplices[i >> 3] |= (byte)(1 << (i & 7));
-            }
         }
     }
 

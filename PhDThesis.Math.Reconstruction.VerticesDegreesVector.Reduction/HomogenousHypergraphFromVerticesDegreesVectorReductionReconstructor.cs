@@ -1,18 +1,19 @@
 ﻿using PhDThesis.Math.Domain;
 using PhDThesis.Math.Domain.Reconstruction;
 
-namespace PhDThesis.Math.Reconstruction.Greedy;
+namespace PhDThesis.Math.Reconstruction.Reduction;
 
 /// <summary>
 /// 
 /// </summary>
-public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstruction
+public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionReconstructor
     : IHomogenousHypergraphReconstructor<VerticesDegreesVector>
 {
     
     /// <inheritdoc cref="IHomogenousHypergraphReconstructor{T}.Restore" />
     public HomogenousHypergraph Restore(
-        VerticesDegreesVector from)
+        VerticesDegreesVector from,
+        int simplicesDimension)
     {
         throw new NotImplementedException();
     }
