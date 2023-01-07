@@ -76,8 +76,6 @@ public partial class HomogenousHypergraphCanvas : UserControl
         {
             return;
         }
-
-        var randomSource = new Random();
         
         var targetCanvas = _componentsCanvas;
         var targetCanvasHeight = targetCanvas.ActualHeight;

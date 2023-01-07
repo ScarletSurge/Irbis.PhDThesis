@@ -20,8 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Math.Reconstructi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction", "PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj", "{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{D03A64E5-62CE-4D7D-98A9-41EBFD94E523}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{98AEDC14-A4B3-4383-ADFB-6A21B75454FA}"
 EndProject
 Global
