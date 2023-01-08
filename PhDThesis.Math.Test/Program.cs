@@ -1,13 +1,10 @@
 ﻿using PhDThesis.Domain.Extensions;
 using PhDThesis.Math.Domain;
 
-Console.WriteLine(BigIntegerExtensions.CombinationsCount(128, 3) / 8);
+var hg = new HomogenousHypergraph(11, 7, new HyperEdge(10, 9, 8, 7, 6, 5, 4));
+Console.WriteLine(hg.ContainsSimplex(new HyperEdge(10, 9, 8, 7, 6, 5, 4)));
 
-var hg = new HomogenousHypergraph(64, 7);
-Console.WriteLine(hg.ContainsSimplex(new [] { 0, 1, 6 }.OrderBy(x => x)));
-var x = 5;
-
-for (var i = 0; i < BigIntegerExtensions.CombinationsCount(64, 7); i++)
+for (var i = 0; i < BigIntegerExtensions.CombinationsCount(11, 7); i++)
 {
     Console.WriteLine($"{i}: {{{string.Join(',', i)}}} - {(hg.ContainsSimplex(i) ? string.Empty : "not ")}set");
 }

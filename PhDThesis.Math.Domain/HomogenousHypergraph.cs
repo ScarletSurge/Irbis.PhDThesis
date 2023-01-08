@@ -1,12 +1,15 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Numerics;
+
 using PhDThesis.Domain.Extensions;
+using PhDThesis.Domain.Helpers.Guarding;
 
 namespace PhDThesis.Math.Domain;
 
 /// <summary>
 /// 
 /// </summary>
-public sealed class HomogenousHypergraph
+public sealed class HomogenousHypergraph : IEnumerable<HyperEdge>
 {
 
     #region Fields
@@ -44,8 +47,10 @@ public sealed class HomogenousHypergraph
     public HomogenousHypergraph(
         int verticesCount,
         int simplicesDimension,
-        params IOrderedEnumerable<int>[] simplicesVertices)
+        params HyperEdge[]? simplicesVertices)
     {
+        Guard.ThrowIfGreaterThan(simplicesDimension, verticesCount);
+        
         VerticesCount = verticesCount;
         SimplicesDimension = simplicesDimension;
         var simplicesMaxCount = _simplicesMaxCount = BigIntegerExtensions.CombinationsCount(
@@ -58,7 +63,7 @@ public sealed class HomogenousHypergraph
         
         _simplices = new byte[(ulong)simplicesMaxCount / 8];
         
-        foreach (var simplexVertex in simplicesVertices ?? Enumerable.Empty<IOrderedEnumerable<int>>())
+        foreach (var simplexVertex in simplicesVertices ?? Enumerable.Empty<HyperEdge>())
         {
             this[simplexVertex] = true;
         }
@@ -67,20 +72,25 @@ public sealed class HomogenousHypergraph
     #endregion
 
     #region Properties
-
-    private bool this[IOrderedEnumerable<int> simplexVertices]
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="hyperEdge"></param>
+    private bool this[
+        HyperEdge hyperEdge]
     {
-        // TODO: guard args
-        
         get
         {
-            var bitIndex = SimplexToBitIndex(simplexVertices);
+            Guard.ThrowIfNull(hyperEdge);
+            var bitIndex = SimplexToBitIndex(hyperEdge);
             return ((_simplices[bitIndex >> 3] >> (bitIndex & 7)) & 1) == 1;
         }
         
         set
         {
-            var bitIndex = SimplexToBitIndex(simplexVertices);
+            Guard.ThrowIfNull(hyperEdge);
+            var bitIndex = SimplexToBitIndex(hyperEdge);
             _simplices[bitIndex >> 3] |= (byte)((value ? 1 : 0) << (bitIndex & 7));
         }
     }
@@ -99,10 +109,7 @@ public sealed class HomogenousHypergraph
 
         private set
         {
-            if (value < 0)
-            {
-                throw new ArgumentException("Vertices count must be GT 0", nameof(value));
-            }
+            Guard.ThrowIfLowerThanOrEqualTo(value, 0);
 
             _verticesCount = value;
         }
@@ -119,10 +126,7 @@ public sealed class HomogenousHypergraph
 
         private set
         {
-            if (value < 2)
-            {
-                throw new ArgumentException("Simplex dimension must be GT 2", nameof(value));
-            }
+            Guard.ThrowIfLowerThanOrEqualTo(value, 1);
 
             _simplicesDimension = value;
         }
@@ -135,15 +139,15 @@ public sealed class HomogenousHypergraph
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="vertices"></param>
+    /// <param name="hyperEdge"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public bool ContainsSimplex(
-        IOrderedEnumerable<int> vertices)
+        HyperEdge hyperEdge)
     {
-        // TODO: guard
+        Guard.ThrowIfNull(hyperEdge);
         
-        return this[vertices];
+        return this[hyperEdge];
     }
     
     /// <summary>
@@ -154,7 +158,8 @@ public sealed class HomogenousHypergraph
     public bool ContainsSimplex(
         int simplexBitIndex)
     {
-        // TODO: guard
+        Guard.ThrowIfLowerThan(simplexBitIndex, 0);
+        Guard.ThrowIfGreaterThanOrEqualTo(simplexBitIndex, SimplicesMaxCount);
         
         return ((_simplices[simplexBitIndex >> 3] >> (simplexBitIndex & 7)) & 1) == 1;
     }
@@ -166,15 +171,15 @@ public sealed class HomogenousHypergraph
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="simplexVertices"></param>
+    /// <param name="hyperEdge"></param>
     /// <returns></returns>
     private int SimplexToBitIndex(
-        IOrderedEnumerable<int> simplexVertices)
+        HyperEdge hyperEdge)
     {
-        // TODO: guard args
+        Guard.ThrowIfNull(hyperEdge);
 
         var result = BigInteger.Zero;
-        using var enumerator = simplexVertices.GetEnumerator();
+        using var enumerator = hyperEdge.GetEnumerator();
         for (var i = 0; i < SimplicesDimension; i++)
         {
             if (!enumerator.MoveNext())
@@ -193,14 +198,17 @@ public sealed class HomogenousHypergraph
     /// <summary>
     /// https://math.stackexchange.com/questions/1227409/indexing-all-combinations-without-making-list
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="simplexBitIndex"></param>
     /// <returns></returns>
-    public IOrderedEnumerable<int> BitIndexToSimplex(
-        int index)
+    public HyperEdge BitIndexToSimplex(
+        int simplexBitIndex)
     {
-        var result = new int[SimplicesDimension];
-        var r = (BigInteger)index;
-        var j = 0;
+        Guard.ThrowIfLowerThan(simplexBitIndex, 0);
+        Guard.ThrowIfGreaterThanOrEqualTo(simplexBitIndex, SimplicesMaxCount);
+        
+        var result = new uint[SimplicesDimension];
+        var r = (BigInteger)simplexBitIndex;
+        var j = (uint)0;
         
         for (var i = 0; i < SimplicesDimension; i++)
         {
@@ -217,9 +225,37 @@ public sealed class HomogenousHypergraph
             j = cs;
         }
         
-        return result.OrderBy(x => x);
+        return new HyperEdge(result);
     }
 
     #endregion
+    
+    #region System.Collections.IEnumerator implementation
+    
+    /// <inheritdoc cref="IEnumerable.GetEnumerator" />
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+    
+    #endregion
+    
+    #region System.Collections.Generic.IEnumerable<out T> implementation
+    
+    /// <inheritdoc cref="IEnumerable{T}.GetEnumerator" />
+    public IEnumerator<HyperEdge> GetEnumerator()
+    {
+        for (var i = 0; i < SimplicesMaxCount; i++)
+        {
+            if (!ContainsSimplex(i))
+            {
+                continue;
+            }
 
+            yield return BitIndexToSimplex(i);
+        }
+    }
+    
+    #endregion
+    
 }

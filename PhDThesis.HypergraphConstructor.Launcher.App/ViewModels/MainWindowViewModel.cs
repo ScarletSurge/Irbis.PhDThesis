@@ -75,14 +75,9 @@ internal sealed class MainWindowViewModel
 
     private void ConstructHypergraphCommandAction()
     {
-        var hg = new HomogenousHypergraph(11, 10,
-            new[] { 0, 1, 13 }.OrderBy(x => x),
-            new[] { 0, 1, 4 }.OrderBy(x => x),
-            new[] { 11, 2, 5 }.OrderBy(x => x),
-            new[] { 1, 5, 11 }.OrderBy(x => x),
-            new[] { 3, 15, 4 }.OrderBy(x => x));
+        
 
-        ConstructedHypergraph = hg;
+        ConstructedHypergraph = new HomogenousHypergraph(10, 1);
     }
 
     #endregion
