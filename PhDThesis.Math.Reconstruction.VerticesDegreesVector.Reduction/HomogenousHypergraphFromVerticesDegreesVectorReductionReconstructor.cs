@@ -15,7 +15,13 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
         VerticesDegreesVector from,
         int simplicesDimension)
     {
-        throw new NotImplementedException();
+        var verticesDegreesSum = from.Sum();
+        
+        var restoredHomogenousHypergraph = new HomogenousHypergraph();
+
+
+
+        return restoredHomogenousHypergraph;
     }
     
 }

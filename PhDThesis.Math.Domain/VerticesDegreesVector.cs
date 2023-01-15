@@ -1,4 +1,6 @@
-﻿using PhDThesis.Domain.Helpers.Guarding;
+﻿using System.Collections;
+
+using PhDThesis.Domain.Helpers.Guarding;
 
 namespace PhDThesis.Math.Domain;
 
@@ -6,12 +8,18 @@ namespace PhDThesis.Math.Domain;
 /// 
 /// </summary>
 public sealed class VerticesDegreesVector
+    : IEnumerable<uint>,
+      ICloneable
 {
+    
+    #region Fields
     
     /// <summary>
     /// 
     /// </summary>
-    private uint[] _verticesDegrees;
+    private readonly uint[] _verticesDegrees;
+    
+    #endregion
     
     #region Constructors
     
@@ -32,7 +40,7 @@ public sealed class VerticesDegreesVector
             throw new ArgumentException("Vertices degrees vector can't be empty", nameof(verticesDegrees));
         }
         
-        _verticesDegrees = verticesDegrees;
+        _verticesDegrees = verticesDegrees.ToArray();
     }
     
     #endregion
@@ -53,27 +61,25 @@ public sealed class VerticesDegreesVector
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="simplexVertices"></param>
+    /// <param name="hyperEdge"></param>
     public void AddSimplex(
-        IOrderedEnumerable<int> simplexVertices)
+        HyperEdge hyperEdge)
     {
-        Guard.ThrowIfNull(simplexVertices);
-        Guard.ThrowIfEmpty(simplexVertices);
-        
-        
+        Guard.ThrowIfNullOrEmpty(hyperEdge);
+
+        throw new NotImplementedException();
     }
     
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="simplexVertices"></param>
+    /// <param name="hyperEdge"></param>
     public void RemoveSimplex(
-        IOrderedEnumerable<int> simplexVertices)
+        HyperEdge hyperEdge)
     {
-        Guard.ThrowIfNull(simplexVertices);
-        Guard.ThrowIfEmpty(simplexVertices);
-        
-        
+        Guard.ThrowIfNullOrEmpty(hyperEdge);
+
+        throw new NotImplementedException();
     }
     
     #endregion
@@ -85,6 +91,33 @@ public sealed class VerticesDegreesVector
         return $"[ {string.Join(", ", _verticesDegrees)} ]";
     }
 
+    #endregion
+    
+    #region System.Collections.IEnumerable implementation
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    #endregion
+    
+    #region System.Collections.Generic.IEnumerable<out T> implementation
+
+    public IEnumerator<uint> GetEnumerator()
+    {
+        return ((IEnumerable<uint>)_verticesDegrees).GetEnumerator();
+    }
+    
+    #endregion
+    
+    #region System.ICloneable implementation
+
+    public object Clone()
+    {
+        return new VerticesDegreesVector(_verticesDegrees);
+    }
+    
     #endregion
 
 }

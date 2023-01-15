@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using PhDThesis.Math.Domain;
 
 namespace PhDThesis.HypergraphConstructor.Launcher.App.Views.Controls;
@@ -13,7 +14,9 @@ namespace PhDThesis.HypergraphConstructor.Launcher.App.Views.Controls;
 /// </summary>
 public partial class HomogenousHypergraphCanvas : UserControl
 {
-
+    
+    // TODO: move to dependency properties
+    // TODO: add colors dependency properties
     private const float VertexRadius = 3;
     private const float SimplexPartThickness = 0.5f;
     private const float SimplexCenterRadius = 1.5f;
@@ -54,7 +57,9 @@ public partial class HomogenousHypergraphCanvas : UserControl
     /// 
     /// </summary>
     public static readonly DependencyProperty HomogenousHypergraphToShowProperty = DependencyProperty.Register(
-        nameof(HomogenousHypergraphToShow), typeof(HomogenousHypergraph), typeof(HomogenousHypergraphCanvas),
+        nameof(HomogenousHypergraphToShow),
+        typeof(HomogenousHypergraph),
+        typeof(HomogenousHypergraphCanvas),
         new FrameworkPropertyMetadata((d, e) =>
         {
             if (!(d is HomogenousHypergraphCanvas homogenousHypergraphCanvas))

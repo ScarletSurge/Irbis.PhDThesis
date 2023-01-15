@@ -14,7 +14,7 @@ public sealed class HyperEdge : IEnumerable<uint>
     /// <summary>
     /// 
     /// </summary>
-    private SortedSet<uint> _vertices;
+    private readonly SortedSet<uint> _vertices;
     
     #endregion
     
@@ -45,6 +45,16 @@ public sealed class HyperEdge : IEnumerable<uint>
         
         _vertices = new SortedSet<uint>(values);
     }
+    
+    #endregion
+    
+    #region Properties
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int VerticesCount =>
+        _vertices.Count;
     
     #endregion
     

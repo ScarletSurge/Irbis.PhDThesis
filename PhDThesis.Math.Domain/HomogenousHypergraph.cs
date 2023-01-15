@@ -83,6 +83,7 @@ public sealed class HomogenousHypergraph : IEnumerable<HyperEdge>
         get
         {
             Guard.ThrowIfNull(hyperEdge);
+            Guard.ThrowIfNotEqual(hyperEdge.VerticesCount, SimplicesDimension);
             var bitIndex = SimplexToBitIndex(hyperEdge);
             return ((_simplices[bitIndex >> 3] >> (bitIndex & 7)) & 1) == 1;
         }
@@ -90,11 +91,15 @@ public sealed class HomogenousHypergraph : IEnumerable<HyperEdge>
         set
         {
             Guard.ThrowIfNull(hyperEdge);
+            Guard.ThrowIfNotEqual(hyperEdge.VerticesCount, SimplicesDimension);
             var bitIndex = SimplexToBitIndex(hyperEdge);
             _simplices[bitIndex >> 3] |= (byte)((value ? 1 : 0) << (bitIndex & 7));
         }
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public int SimplicesMaxCount =>
         (int)_simplicesMaxCount;
 

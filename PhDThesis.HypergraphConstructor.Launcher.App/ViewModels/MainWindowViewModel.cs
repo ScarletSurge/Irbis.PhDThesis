@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Input;
 using PhDThesis.Math.Domain;
+
 using Wpf.MVVM.Core.Commands;
 using Wpf.MVVM.Core.ViewModels;
 

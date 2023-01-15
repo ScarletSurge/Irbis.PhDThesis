@@ -3,6 +3,7 @@
 /// <summary>
 /// 
 /// </summary>
+/// <typeparam name="T"></typeparam>
 public interface IHomogenousHypergraphReconstructor<in T>
 {
     
@@ -15,5 +16,5 @@ public interface IHomogenousHypergraphReconstructor<in T>
     HomogenousHypergraph Restore(
         T from,
         int simplicesDimension);
-    
+
 }
