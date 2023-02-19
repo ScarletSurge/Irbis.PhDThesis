@@ -16,8 +16,14 @@ public abstract class HomogenousHypergraphReconstructorBase<T>
         ThrowIfInvalidInputPrototype(from, simplicesDimension);
         return RestoreInner(from, simplicesDimension);
     }
-
-    protected abstract void RestoreInner(
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="simplicesDimension"></param>
+    /// <returns></returns>
+    protected abstract HomogenousHypergraph RestoreInner(
         T from,
         int simplicesDimension);
 

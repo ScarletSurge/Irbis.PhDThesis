@@ -7,11 +7,19 @@ namespace PhDThesis.Math.Reconstruction.Greedy;
 /// 
 /// </summary>
 public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstructor
-    : IHomogenousHypergraphReconstructor<VerticesDegreesVector>
+    : HomogenousHypergraphReconstructorBase<VerticesDegreesVector>
 {
     
-    /// <inheritdoc cref="IHomogenousHypergraphReconstructor{T}.Restore" />
-    public HomogenousHypergraph Restore(
+    /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.Restore" />
+    protected override HomogenousHypergraph RestoreInner(
+        VerticesDegreesVector from,
+        int simplicesDimension)
+    {
+        throw new NotImplementedException();
+    }
+    
+    /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.ThrowIfInvalidInputPrototype" />
+    protected override void ThrowIfInvalidInputPrototype(
         VerticesDegreesVector from,
         int simplicesDimension)
     {

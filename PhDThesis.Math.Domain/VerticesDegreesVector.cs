@@ -53,6 +53,12 @@ public sealed class VerticesDegreesVector
     /// <param name="vertexId"></param>
     public uint this[int vertexId] =>
         _verticesDegrees[vertexId];
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public int VerticesCount =>
+        _verticesDegrees.Length;
 
     #endregion
     
