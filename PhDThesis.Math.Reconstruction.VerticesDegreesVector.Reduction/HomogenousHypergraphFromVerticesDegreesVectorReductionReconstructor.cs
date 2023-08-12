@@ -1,5 +1,4 @@
-﻿using PhDThesis.Domain.Helpers.Guarding;
-using PhDThesis.Math.Domain;
+﻿using PhDThesis.Math.Domain;
 using PhDThesis.Math.Domain.Reconstruction;
 
 namespace PhDThesis.Math.Reconstruction.Reduction;
@@ -7,28 +6,31 @@ namespace PhDThesis.Math.Reconstruction.Reduction;
 /// <summary>
 /// 
 /// </summary>
-public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionReconstructor
-    : HomogenousHypergraphReconstructorBase<VerticesDegreesVector>
+public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionReconstructor:
+    HomogenousHypergraphFromVerticesDegreesVectorReconstructorBase
 {
+    
+    #region PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreInner" />
     protected override HomogenousHypergraph RestoreInner(
         VerticesDegreesVector from,
         int simplicesDimension)
     {
-        Guard.ThrowIfLowerThan(simplicesDimension, 2);
-        
         var restoredHomogenousHypergraph = new HomogenousHypergraph(from.VerticesCount, simplicesDimension);
         
         return restoredHomogenousHypergraph;
     }
     
-    /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.ThrowIfInvalidInputPrototype" />
-    protected override void ThrowIfInvalidInputPrototype(
+    /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreInnerAsync" />
+    protected override Task<HomogenousHypergraph> RestoreInnerAsync(
         VerticesDegreesVector from,
-        int simplicesDimension)
+        int simplicesDimension,
+        CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
+    
+    #endregion
     
 }

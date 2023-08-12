@@ -11,11 +11,31 @@ public static class BigIntegerExtensions
     /// <summary>
     /// 
     /// </summary>
+    public static BigInteger Two =>
+        2;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    public static BigInteger LeastCommonMultiple(
+        BigInteger left,
+        BigInteger right)
+    {
+        return BigInteger.Abs(left * right) / BigInteger.GreatestCommonDivisor(left, right);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
     public static BigInteger Factorial(
         this BigInteger value)
     {
+        
         if (value < BigInteger.Zero)
         {
             throw new ArgumentException("value must be GT 0", nameof(value));
@@ -23,14 +43,20 @@ public static class BigIntegerExtensions
 
         var factorial = BigInteger.One;
 
-        for (var i = (BigInteger)2; i <= value; i++)
+        for (var i = Two; i <= value; i++)
         {
             factorial *= i;
         }
 
         return factorial;
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n"></param>
+    /// <param name="k"></param>
+    /// <returns></returns>
     public static BigInteger CombinationsCount(
         BigInteger n,
         BigInteger k)

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO.Compression;
 using PhDThesis.Domain.Helpers.Guarding;
 
 namespace PhDThesis.Math.Domain;
@@ -6,7 +7,9 @@ namespace PhDThesis.Math.Domain;
 /// <summary>
 /// 
 /// </summary>
-public sealed class HyperEdge : IEnumerable<uint>
+public sealed class HyperEdge:
+    IEquatable<HyperEdge>,
+    IEnumerable<uint>
 {
     
     #region Fields
@@ -27,8 +30,8 @@ public sealed class HyperEdge : IEnumerable<uint>
     public HyperEdge(
         params uint[] values)
     {
-        Guard.ThrowIfNull(values);
-        Guard.ThrowIfEmpty(values);
+        Guardant.Instance
+            .ThrowIfNullOrEmpty(values);
 
         _vertices = new SortedSet<uint>(values);
     }
@@ -40,8 +43,8 @@ public sealed class HyperEdge : IEnumerable<uint>
     public HyperEdge(
         IEnumerable<uint> values)
     {
-        Guard.ThrowIfNull(values);
-        Guard.ThrowIfEmpty(values);
+        Guardant.Instance
+            .ThrowIfNullOrEmpty(values);
         
         _vertices = new SortedSet<uint>(values);
     }
@@ -59,6 +62,36 @@ public sealed class HyperEdge : IEnumerable<uint>
     #endregion
     
     #region System.Object overrides
+    
+    /// <inheritdoc cref="object.Equals(object?)" />
+    public override bool Equals(
+        object? obj)
+    {
+        if (obj is null)
+        {
+            return false;
+        }
+
+        if (obj is HyperEdge hyperEdge)
+        {
+            return Equals(hyperEdge);
+        }
+
+        return false;
+    }
+    
+    /// <inheritdoc cref="object.GetHashCode" />
+    public override int GetHashCode()
+    {
+        var combinedHashCode = default(HashCode);
+        
+        foreach (var vertexIndex in _vertices)
+        {
+            combinedHashCode.Add(vertexIndex.GetHashCode());
+        }
+
+        return combinedHashCode.ToHashCode();
+    }
 
     /// <inheritdoc cref="object.ToString" />
     public override string ToString()
@@ -66,6 +99,21 @@ public sealed class HyperEdge : IEnumerable<uint>
         return string.Join(", ", _vertices);
     }
 
+    #endregion
+    
+    #region System.IEquatable<HyperEdge> implementation
+
+    public bool Equals(
+        HyperEdge? hyperEdge)
+    {
+        if (hyperEdge is null)
+        {
+            return false;
+        }
+
+        return _vertices.Equals(hyperEdge._vertices);
+    }
+    
     #endregion
     
     #region System.Collections.IEnumerator implementation

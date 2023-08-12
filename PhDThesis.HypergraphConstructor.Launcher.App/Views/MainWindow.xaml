@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:reconstruction="clr-namespace:PhDThesis.Math.Domain.Reconstruction;assembly=PhDThesis.Math.Domain"
         xmlns:controls="clr-namespace:PhDThesis.HypergraphConstructor.Launcher.App.Views.Controls"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:viewModels="clr-namespace:PhDThesis.HypergraphConstructor.Launcher.App.ViewModels"
         mc:Ignorable="d"
         Background="{x:Static SystemColors.ControlBrush}"
@@ -36,26 +38,77 @@
               Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       Text="Вектор степеней вершин: " />
-            <TextBox Grid.Row="0"
-                     Grid.Column="1"
-                     Text=" " />
-            <Button Grid.Row="0"
-                    Grid.Column="2"
-                    Content="Построить"
-                    Command="{Binding ConstructHypergraphCommand}" />
-            <controls:HomogenousHypergraphCanvas Grid.Row="1"
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="Вектор степеней вершин: " />
+                <TextBox Grid.Row="0"
+                         Grid.Column="1"
+                         Text="{Binding VerticesDegreesVectorString, Mode=OneWayToSource}" />
+                <Button Grid.Row="0"
+                        Grid.Column="2"
+                        Content="Построить"
+                        Command="{Binding ConstructHypergraphCommand}" />
+            </Grid>
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal">
+                <TextBlock Text="Размерность симплекса однородного гиперграфа: " />
+                <Grid Margin="5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Command="{Binding SetupSimplicesDimensionCommand}"
+                            Content="-">
+                        <Button.CommandParameter>
+                            <system:Int32>
+                                -1
+                            </system:Int32>
+                        </Button.CommandParameter>
+                    </Button>
+                    <TextBlock Grid.Column="1"
+                               Margin="5,0"
+                               Text="{Binding SimplicesDimension, Mode=OneWay}" />
+                    <Button Grid.Column="2"
+                            Command="{Binding SetupSimplicesDimensionCommand}"
+                            Content="+">
+                        <Button.CommandParameter>
+                            <system:Int32>
+                                1
+                            </system:Int32>
+                        </Button.CommandParameter>
+                    </Button>
+                </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="2"
+                            Orientation="Horizontal">
+                <TextBlock Text="Алгоритм восстановления: " />
+                <RadioButton GroupName="RestorationAlgorithm"
+                             Content="Жадный"
+                             Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
+                             CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Greedy}">
+                    <RadioButton.IsChecked>
+                        True
+                    </RadioButton.IsChecked>
+                </RadioButton>
+                    <RadioButton GroupName="RestorationAlgorithm"
+                                 Content="Редукционный"
+                                 Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
+                                 CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Reduction}" />
+            </StackPanel>
+            <controls:HomogenousHypergraphCanvas Grid.Row="3"
                                                  Grid.Column="0"
-                                                 Grid.ColumnSpan="3"
                                                  HomogenousHypergraphToShow="{Binding ConstructedHypergraph, Mode=OneWay}" />
         </Grid>
         <StatusBar Grid.Row="2"

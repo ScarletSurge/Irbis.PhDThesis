@@ -1,27 +1,59 @@
 ﻿namespace PhDThesis.Domain.Helpers.Guarding;
 
-// TODO: unstatic?!
 /// <summary>
 /// 
 /// </summary>
-public static class Guard
+public sealed class Guardant
 {
     
     /// <summary>
     /// 
     /// </summary>
+    private static Guardant _instance = new ();
+
+    public static Guardant Instance =>
+        _instance;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private Guardant()
+    {
+        
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="predicate"></param>
+    /// <param name="exceptionMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="GuardException"></exception>
+    public Guardant ThrowIf<T>(
+        T? value,
+        Predicate<T?> predicate,
+        string exceptionMessage)
+    {
+        if (predicate(value))
+        {
+            throw new GuardException(exceptionMessage);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="value"></param>
     /// <typeparam name="T"></typeparam>
-    public static void ThrowIfNull<T>(
+    public Guardant ThrowIfNull<T>(
         T? value)
         where T : class
     {
-        if (value is not null)
-        {
-            return;
-        }
-        
-        throw new GuardException("Value is null.");
+        return ThrowIf(value, passedValue => passedValue is null, "Value is null.");
     }
     
     /// <summary>
@@ -29,12 +61,13 @@ public static class Guard
     /// </summary>
     /// <param name="value"></param>
     /// <typeparam name="T"></typeparam>
-    public static void ThrowIfEmpty<T>(
+    public Guardant ThrowIfEmpty<T>(
         IEnumerable<T> value)
     {
+        //return ThrowIf(value, passedValue => !passedValue.Any())
         if (value.Any())
         {
-            return;
+            return this;
         }
         
         throw new GuardException("Value is empty enumerable.");
@@ -45,11 +78,10 @@ public static class Guard
     /// </summary>
     /// <param name="value"></param>
     /// <typeparam name="T"></typeparam>
-    public static void ThrowIfNullOrEmpty<T>(
+    public Guardant ThrowIfNullOrEmpty<T>(
         IEnumerable<T>? value)
     {
-        ThrowIfNull(value);
-        ThrowIfEmpty(value);
+        return ThrowIfNull(value).ThrowIfEmpty(value);
     }
     
     /// <summary>
@@ -59,14 +91,14 @@ public static class Guard
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfEqual<T>(
+    public Guardant ThrowIfEqual<T>(
         T initialValue,
         T valueToCompareWith)
         where T : IEquatable<T>
     {
         if (!initialValue.Equals(valueToCompareWith))
         {
-            return;
+            return this;
         }
         
         throw new GuardException("Initial value equals to other value by inner equality comparison.");
@@ -80,14 +112,14 @@ public static class Guard
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfEqual<T>(
+    public Guardant ThrowIfEqual<T>(
         T initialValue,
         T valueToCompareWith,
         IEqualityComparer<T> comparer)
     {
         if (!comparer.Equals(initialValue, valueToCompareWith))
         {
-            return;
+            return this;
         }
         
         throw new GuardException("Initial value equals to other value by outer equality comparison.");
@@ -100,14 +132,14 @@ public static class Guard
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfNotEqual<T>(
+    public Guardant ThrowIfNotEqual<T>(
         T initialValue,
         T valueToCompareWith)
         where T : IEquatable<T>
     {
         if (initialValue.Equals(valueToCompareWith))
         {
-            return;
+            return this;
         }
         
         throw new GuardException("Initial value not equals to other value by inner equality comparison.");
@@ -121,14 +153,14 @@ public static class Guard
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfNotEqual<T>(
+    public Guardant ThrowIfNotEqual<T>(
         T initialValue,
         T valueToCompareWith,
         IEqualityComparer<T> comparer)
     {
         if (comparer.Equals(initialValue, valueToCompareWith))
         {
-            return;
+            return this;
         }
         
         throw new GuardException("Initial value not equals to other value by outer equality comparison.");
@@ -141,14 +173,14 @@ public static class Guard
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfLowerThan<T>(
+    public Guardant ThrowIfLowerThan<T>(
         T initialValue,
         T valueToCompareWith)
         where T : IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) >= 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is LT other value by inner comparison.");
@@ -162,14 +194,14 @@ public static class Guard
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfLowerThan<T>(
+    public Guardant ThrowIfLowerThan<T>(
         T initialValue,
         T valueToCompareWith,
         IComparer<T> comparer)
     {
         if (comparer.Compare(initialValue, valueToCompareWith) >= 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is LT other value by outer comparison.");
@@ -182,14 +214,14 @@ public static class Guard
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfLowerThanOrEqualTo<T>(
+    public Guardant ThrowIfLowerThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith)
         where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) > 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is LT or EQ to other value by inner comparison.");
@@ -203,14 +235,14 @@ public static class Guard
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfLowerThanOrEqualTo<T>(
+    public Guardant ThrowIfLowerThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith,
         IComparer<T> comparer)
     {
         if (comparer.Compare(initialValue, valueToCompareWith) > 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is LT or EQ to other value by outer comparison.");
@@ -223,14 +255,14 @@ public static class Guard
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfGreaterThan<T>(
+    public Guardant ThrowIfGreaterThan<T>(
         T initialValue,
         T valueToCompareWith)
         where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) <= 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is GT other value by inner comparison.");
@@ -244,14 +276,14 @@ public static class Guard
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfGreaterThan<T>(
+    public Guardant ThrowIfGreaterThan<T>(
         T initialValue,
         T valueToCompareWith,
         IComparer<T> comparer)
     {
         if (comparer.Compare(initialValue, valueToCompareWith) <= 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is GT other value by outer comparison.");
@@ -264,14 +296,14 @@ public static class Guard
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfGreaterThanOrEqualTo<T>(
+    public Guardant ThrowIfGreaterThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith)
         where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) < 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is GT or EQ to other value by inner comparison.");
@@ -285,14 +317,14 @@ public static class Guard
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardException"></exception>
-    public static void ThrowIfGreaterThanOrEqualTo<T>(
+    public Guardant ThrowIfGreaterThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith,
         IComparer<T> comparer)
     {
         if (comparer.Compare(initialValue, valueToCompareWith) < 0)
         {
-            return;
+            return this;
         }
 
         throw new GuardException("Initial value is GT or EQ to other value by outer comparison.");

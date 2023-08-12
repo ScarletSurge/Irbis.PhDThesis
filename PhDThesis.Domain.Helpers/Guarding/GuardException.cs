@@ -3,7 +3,8 @@
 /// <summary>
 /// TODO: other base exception type?
 /// </summary>
-public sealed class GuardException : Exception
+public sealed class GuardException:
+    Exception
 {
     
     #region Constructors
