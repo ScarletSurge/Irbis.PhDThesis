@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Wpf.MVVM.Core.Commands;
 using Wpf.MVVM.Core.ViewModels;
@@ -167,6 +168,9 @@ internal sealed class MainWindowViewModel
         }
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
     public int SimplicesDimension
     {
         get =>
@@ -215,7 +219,11 @@ internal sealed class MainWindowViewModel
     {
 
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="increment"></param>
     private void SetupSimplicesDimensionCommandAction(
         int increment)
     {
@@ -248,7 +256,7 @@ internal sealed class MainWindowViewModel
 
         if (verticesDegreesStrings.Length == 0)
         {
-            // TODO: message
+            MessageBox.Show("");
 
             return;
         }
@@ -271,7 +279,7 @@ internal sealed class MainWindowViewModel
 
         if (!parsed)
         {
-            // TODO: message
+            MessageBox.Show("");
 
             return;
         }
@@ -282,7 +290,7 @@ internal sealed class MainWindowViewModel
         }
         catch (Exception ex)
         {
-            // TODO: message
+            MessageBox.Show("");
         }
     }
 

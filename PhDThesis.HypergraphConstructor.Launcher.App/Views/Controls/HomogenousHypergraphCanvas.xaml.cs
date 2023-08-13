@@ -77,17 +77,18 @@ public partial class HomogenousHypergraphCanvas : UserControl
     /// </summary>
     private void ReconstructHypergraph()
     {
+        var targetCanvas = _componentsCanvas;
+        targetCanvas.Children.Clear();
+        
         if (_currentHypergraphModel is null)
         {
             return;
         }
         
-        var targetCanvas = _componentsCanvas;
         var targetCanvasHeight = targetCanvas.ActualHeight;
         var targetCanvasWidth = targetCanvas.ActualWidth;
         var targetCanvasCenterPoint = new Point(targetCanvasWidth / 2, targetCanvasHeight / 2);
-        targetCanvas.Children.Clear();
-        
+
         var vertices = new (Ellipse, Point)[_currentHypergraphModel.VerticesCount];
         var halfSide = (int)(0.375 * System.Math.Min(targetCanvasWidth, targetCanvasHeight));
         var startPoint = targetCanvasCenterPoint with { X = targetCanvasCenterPoint.X + halfSide };

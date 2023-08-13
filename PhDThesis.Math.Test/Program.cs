@@ -49,7 +49,7 @@ void TestCalkinWilfTree(int? randomSource = null)
     var random = new Random(randomSource.Value);
     Console.WriteLine($"Seed: {randomSource.Value}");
     
-    var pathLength = random.Next(500, 1000);
+    var pathLength = random.Next(16, 16);
     Console.WriteLine($"Bits count: {pathLength}");
     
     var bits = Enumerable
@@ -83,5 +83,5 @@ void TestCalkinWilfTree(int? randomSource = null)
 //TestHypergraphIteration();
 //TestHypergraphEtc();
 //TestContinuedFraction();
-TestCalkinWilfTree(12345);
+TestCalkinWilfTree(12346);
 //TestSternBrokotTree();

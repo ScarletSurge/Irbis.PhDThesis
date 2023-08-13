@@ -124,10 +124,11 @@ public sealed class VerticesDegreesVector:
             .ThrowIfNullOrEmpty(hyperEdge)
             .ThrowIfGreaterThan(hyperEdge.VerticesCount, _verticesDegrees.Length);
 
-        foreach (var vertex in hyperEdge)
+        foreach (var vertexIndex in hyperEdge)
         {
             Guardant.Instance
-                .ThrowIfGreaterThanOrEqualTo(vertex, (uint)_verticesDegrees.Length);
+                .ThrowIfGreaterThanOrEqualTo(vertexIndex, (uint)_verticesDegrees.Length)
+                .ThrowIfEqual(_verticesDegrees[vertexIndex], 0u);
         }
 
         foreach (var vertex in hyperEdge)
