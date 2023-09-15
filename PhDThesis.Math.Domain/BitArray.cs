@@ -119,7 +119,7 @@ public sealed class BitArray:
     
     #endregion
     
-    #region System.Collections.Ienumerable implementation
+    #region System.Collections.IEnumerable implementation
     
     IEnumerator IEnumerable.GetEnumerator()
     {

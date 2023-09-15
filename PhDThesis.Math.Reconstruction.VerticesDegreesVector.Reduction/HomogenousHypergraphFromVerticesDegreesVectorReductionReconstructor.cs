@@ -99,7 +99,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
     #region PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreInner" />
-    protected override HomogenousHypergraph RestoreInner(
+    protected override HomogenousHypergraph? RestoreInner(
         VerticesDegreesVector from,
         int simplicesDimension)
     {
@@ -107,7 +107,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
     }
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreInnerAsync" />
-    protected override Task<HomogenousHypergraph> RestoreInnerAsync(
+    protected override Task<HomogenousHypergraph?> RestoreInnerAsync(
         VerticesDegreesVector from,
         int simplicesDimension,
         CancellationToken cancellationToken = default)

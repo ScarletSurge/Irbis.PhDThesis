@@ -30,7 +30,7 @@ public sealed class Guardant
     /// <param name="exceptionMessage"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIf<T>(
         T? value,
         Predicate<T?> predicate,
@@ -38,7 +38,7 @@ public sealed class Guardant
     {
         if (predicate(value))
         {
-            throw new GuardException(exceptionMessage);
+            throw new GuardantException(exceptionMessage);
         }
 
         return this;
@@ -70,7 +70,7 @@ public sealed class Guardant
             return this;
         }
         
-        throw new GuardException("Value is empty enumerable.");
+        throw new GuardantException("Value is empty enumerable.");
     }
     
     /// <summary>
@@ -90,7 +90,7 @@ public sealed class Guardant
     /// <param name="initialValue"></param>
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfEqual<T>(
         T initialValue,
         T valueToCompareWith)
@@ -101,7 +101,7 @@ public sealed class Guardant
             return this;
         }
         
-        throw new GuardException("Initial value equals to other value by inner equality comparison.");
+        throw new GuardantException("Initial value equals to other value by inner equality comparison.");
     }
     
     /// <summary>
@@ -111,7 +111,7 @@ public sealed class Guardant
     /// <param name="valueToCompareWith"></param>
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfEqual<T>(
         T initialValue,
         T valueToCompareWith,
@@ -122,7 +122,7 @@ public sealed class Guardant
             return this;
         }
         
-        throw new GuardException("Initial value equals to other value by outer equality comparison.");
+        throw new GuardantException("Initial value equals to other value by outer equality comparison.");
     }
     
     /// <summary>
@@ -131,7 +131,7 @@ public sealed class Guardant
     /// <param name="initialValue"></param>
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfNotEqual<T>(
         T initialValue,
         T valueToCompareWith)
@@ -142,7 +142,7 @@ public sealed class Guardant
             return this;
         }
         
-        throw new GuardException("Initial value not equals to other value by inner equality comparison.");
+        throw new GuardantException("Initial value not equals to other value by inner equality comparison.");
     }
     
     /// <summary>
@@ -152,7 +152,7 @@ public sealed class Guardant
     /// <param name="valueToCompareWith"></param>
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfNotEqual<T>(
         T initialValue,
         T valueToCompareWith,
@@ -163,7 +163,7 @@ public sealed class Guardant
             return this;
         }
         
-        throw new GuardException("Initial value not equals to other value by outer equality comparison.");
+        throw new GuardantException("Initial value not equals to other value by outer equality comparison.");
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public sealed class Guardant
     /// <param name="initialValue"></param>
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfLowerThan<T>(
         T initialValue,
         T valueToCompareWith)
@@ -183,7 +183,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is LT other value by inner comparison.");
+        throw new GuardantException("Initial value is LT other value by inner comparison.");
     }
     
     /// <summary>
@@ -193,7 +193,7 @@ public sealed class Guardant
     /// <param name="valueToCompareWith"></param>
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfLowerThan<T>(
         T initialValue,
         T valueToCompareWith,
@@ -204,7 +204,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is LT other value by outer comparison.");
+        throw new GuardantException("Initial value is LT other value by outer comparison.");
     }
 
     /// <summary>
@@ -213,7 +213,7 @@ public sealed class Guardant
     /// <param name="initialValue"></param>
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfLowerThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith)
@@ -224,7 +224,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is LT or EQ to other value by inner comparison.");
+        throw new GuardantException("Initial value is LT or EQ to other value by inner comparison.");
     }
     
     /// <summary>
@@ -234,7 +234,7 @@ public sealed class Guardant
     /// <param name="valueToCompareWith"></param>
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfLowerThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith,
@@ -245,7 +245,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is LT or EQ to other value by outer comparison.");
+        throw new GuardantException("Initial value is LT or EQ to other value by outer comparison.");
     }
     
     /// <summary>
@@ -254,7 +254,7 @@ public sealed class Guardant
     /// <param name="initialValue"></param>
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfGreaterThan<T>(
         T initialValue,
         T valueToCompareWith)
@@ -265,7 +265,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is GT other value by inner comparison.");
+        throw new GuardantException("Initial value is GT other value by inner comparison.");
     }
     
     /// <summary>
@@ -275,7 +275,7 @@ public sealed class Guardant
     /// <param name="valueToCompareWith"></param>
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfGreaterThan<T>(
         T initialValue,
         T valueToCompareWith,
@@ -286,7 +286,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is GT other value by outer comparison.");
+        throw new GuardantException("Initial value is GT other value by outer comparison.");
     }
     
     /// <summary>
@@ -295,7 +295,7 @@ public sealed class Guardant
     /// <param name="initialValue"></param>
     /// <param name="valueToCompareWith"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfGreaterThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith)
@@ -306,7 +306,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is GT or EQ to other value by inner comparison.");
+        throw new GuardantException("Initial value is GT or EQ to other value by inner comparison.");
     }
     
     /// <summary>
@@ -316,7 +316,7 @@ public sealed class Guardant
     /// <param name="valueToCompareWith"></param>
     /// <param name="comparer"></param>
     /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardException"></exception>
+    /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfGreaterThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith,
@@ -327,7 +327,7 @@ public sealed class Guardant
             return this;
         }
 
-        throw new GuardException("Initial value is GT or EQ to other value by outer comparison.");
+        throw new GuardantException("Initial value is GT or EQ to other value by outer comparison.");
     }
     
 }

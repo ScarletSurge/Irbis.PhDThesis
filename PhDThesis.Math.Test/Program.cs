@@ -1,4 +1,5 @@
-﻿using PhDThesis.Domain.Extensions;
+﻿using System.Numerics;
+using PhDThesis.Domain.Extensions;
 using PhDThesis.Math.Domain;
 using PhDThesis.Math.Domain.Fraction;
 using PhDThesis.Math.Domain.FractionTree;
@@ -28,28 +29,29 @@ void TestHypergraphEtc()
     }
 }
 
-void TestContinuedFraction()
+void TestContinuedFraction(Fraction targetFraction)
 {
     var i = 0;
     
-    Console.Write("[ ");
-    foreach (var component in new Fraction(1425673, 8137).ToContinuedFraction())
+    Console.Write($"{targetFraction} == [ ");
+    var targetFractionAsContinuedFraction = targetFraction.ToContinuedFraction();
+    foreach (var targetFractionCoefficient in targetFractionAsContinuedFraction)
     {
-        Console.Write(component);
+        Console.Write(targetFractionCoefficient);
         Console.Write(++i == 1
             ? "; "
             : ", ");
     }
-    Console.Write(']');
+    Console.Write($"] == {targetFractionAsContinuedFraction.ToFraction()}");
 }
 
-void TestCalkinWilfTree(int? randomSource = null)
+void TestFractionTrees(int? randomSource = null)
 {
     randomSource ??= new Random().Next();
     var random = new Random(randomSource.Value);
     Console.WriteLine($"Seed: {randomSource.Value}");
     
-    var pathLength = random.Next(16, 16);
+    var pathLength = random.Next(25000, 25000);
     Console.WriteLine($"Bits count: {pathLength}");
     
     var bits = Enumerable
@@ -64,10 +66,14 @@ void TestCalkinWilfTree(int? randomSource = null)
     }
     Console.WriteLine();
     
-    var trees = new IFractionTree[] { new SternBrokotTree(), new CalkinWilfTree() }.Zip(new [] { "Stern-Brokot tree", "Calkin-Wilf tree" });
+    var trees = new IFractionTree[] { new SternBrokotTree(), new CalkinWilfTree() }
+        .Zip(new [] { "Stern-Brokot tree", "Calkin-Wilf tree" });
     foreach (var tree in trees)
     {
         var restoredFraction = tree.First.FindFractionByPath(targetPath);
+        var bitsForNumerator = Math.Ceiling(BigInteger.Log(restoredFraction.Numerator, 2));
+        var bitsForDenominator = Math.Ceiling(BigInteger.Log(restoredFraction.Denominator, 2));
+        Console.WriteLine($"Total bits for numerator and denominator as numbers == {bitsForNumerator + bitsForDenominator}");
         Console.WriteLine($"Restored fraction by path with {tree.Second}: {restoredFraction}");
         var restoredPath = tree.First.FindPathByFraction(restoredFraction);
         Console.WriteLine($"Restored path by restored fraction with {tree.Second}: ");
@@ -82,6 +88,6 @@ void TestCalkinWilfTree(int? randomSource = null)
 //TestHypergraphConstruction();
 //TestHypergraphIteration();
 //TestHypergraphEtc();
-//TestContinuedFraction();
-TestCalkinWilfTree(12346);
+//TestContinuedFraction(new Fraction(13, 29));
+TestFractionTrees(12346);
 //TestSternBrokotTree();

@@ -13,6 +13,14 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     
     #region Recursive restoration
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="simplicesDimension"></param>
+    /// <param name="verticesDegreesSum"></param>
+    /// <param name="addedSimplices"></param>
+    /// <returns></returns>
     [Obsolete]
     private HomogenousHypergraph? RestoreInnerRecursive(
         VerticesDegreesVector from,
@@ -55,6 +63,15 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
         return null;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="simplicesDimension"></param>
+    /// <param name="verticesDegreesSum"></param>
+    /// <param name="addedSimplices"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [Obsolete]
     private async Task<HomogenousHypergraph?> RestoreInnerRecursiveAsync(
         VerticesDegreesVector from,
@@ -104,6 +121,12 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     
     #region Iterative restoration
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="simplicesDimension"></param>
+    /// <returns></returns>
     private HomogenousHypergraph? RestoreInnerIterative(
         VerticesDegreesVector from,
         int simplicesDimension)
@@ -140,7 +163,14 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
         return new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplicesSequence.Select(x => x.Item2).ToArray());
     }
     
-    private async Task<HomogenousHypergraph?> RestoreInnerIterativeAsync(
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="simplicesDimension"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    private Task<HomogenousHypergraph?> RestoreInnerIterativeAsync(
         VerticesDegreesVector from,
         int simplicesDimension,
         CancellationToken cancellationToken = default)
@@ -178,7 +208,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
             }
         }
 
-        return new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplicesSequence.Select(x => x.Item2).ToArray());
+        return Task.FromResult<HomogenousHypergraph?>(new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplicesSequence.Select(x => x.Item2).ToArray()));
     }
     
     #endregion

@@ -107,7 +107,7 @@ public sealed class VerticesDegreesVector:
             RemoveSimplex(hyperEdge);
             return true;
         }
-        catch (GuardException)
+        catch (GuardantException)
         {
             return false;
         }

@@ -43,13 +43,23 @@ public static class FractionExtensions
         Guardant.Instance
             .ThrowIfNullOrEmpty(continuedFraction);
 
-        return FromContinuedFractionInner(continuedFraction);
+        var previousNumerator = BigInteger.One;
+        var previousDenominator = BigInteger.Zero;
+        var currentNumerator = continuedFraction.First();
+        var currentDenominator = BigInteger.One;
 
-        static Fraction FromContinuedFractionInner(
-            IEnumerable<BigInteger> continuedFraction)
+        foreach (var continuedFractionCoefficient in continuedFraction.Skip(1))
         {
-            throw new NotImplementedException();
+            var nextNumerator = continuedFractionCoefficient * currentNumerator + previousNumerator;
+            previousNumerator = currentNumerator;
+            currentNumerator = nextNumerator;
+
+            var nextDenominator = continuedFractionCoefficient * currentDenominator + previousDenominator;
+            previousDenominator = currentDenominator;
+            currentDenominator = nextDenominator;
         }
+
+        return new Fraction(currentNumerator, currentDenominator);
     }
     
 }

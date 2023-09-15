@@ -3,7 +3,7 @@
 /// <summary>
 /// TODO: other base exception type?
 /// </summary>
-public sealed class GuardException:
+public sealed class GuardantException:
     Exception
 {
     
@@ -14,7 +14,7 @@ public sealed class GuardException:
     /// </summary>
     /// <param name="message"></param>
     /// <param name="innerException"></param>
-    public GuardException(
+    public GuardantException(
         string message,
         Exception? innerException = null)
         : base(message, innerException)
