@@ -7,14 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="ScarletSurge.Wpf.MVVM" Version="1.0.0" />
-      <PackageReference Include="ScarletSurge.Wpf.MVVM.Core" Version="1.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\PhDThesis.Math.Domain\PhDThesis.Math.Domain.csproj" />
       <ProjectReference Include="..\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy.csproj" />
       <ProjectReference Include="..\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj" />
+      <ProjectReference Include="..\PhDThesis.UI.WPF.Controls\PhDThesis.UI.WPF.Controls.csproj" />
     </ItemGroup>
 
 </Project>

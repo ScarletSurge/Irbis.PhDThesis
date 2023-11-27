@@ -51,7 +51,7 @@ void TestFractionTrees(int? randomSource = null)
     var random = new Random(randomSource.Value);
     Console.WriteLine($"Seed: {randomSource.Value}");
     
-    var pathLength = random.Next(25000, 25000);
+    var pathLength = random.Next(256, 1024);
     Console.WriteLine($"Bits count: {pathLength}");
     
     var bits = Enumerable
@@ -85,9 +85,8 @@ void TestFractionTrees(int? randomSource = null)
     }
 }
 
-//TestHypergraphConstruction();
-//TestHypergraphIteration();
-//TestHypergraphEtc();
-//TestContinuedFraction(new Fraction(13, 29));
+TestHypergraphConstruction();
+TestHypergraphIteration();
+TestHypergraphEtc();
+TestContinuedFraction(new Fraction(13, 29));
 TestFractionTrees(12346);
-//TestSternBrokotTree();

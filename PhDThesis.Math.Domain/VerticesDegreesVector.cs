@@ -53,7 +53,8 @@ public sealed class VerticesDegreesVector:
     /// 
     /// </summary>
     /// <param name="vertexId"></param>
-    public uint this[uint vertexId]
+    public uint this[
+        uint vertexId]
     {
         get =>
             _verticesDegrees[vertexId];

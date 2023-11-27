@@ -3,22 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:PhDThesis.UI.WPF.Controls;assembly=PhDThesis.UI.WPF.Controls"
+        xmlns:converters="clr-namespace:Irbis.WPF.MVVM.Converters;assembly=Irbis.WPF.MVVM"
         xmlns:reconstruction="clr-namespace:PhDThesis.Math.Domain.Reconstruction;assembly=PhDThesis.Math.Domain"
-        xmlns:controls="clr-namespace:PhDThesis.HypergraphConstructor.Launcher.App.Views.Controls"
+        xmlns:localControls="clr-namespace:PhDThesis.HypergraphConstructor.Launcher.App.Views.Controls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:systemWindowsPresentationCore="clr-namespace:System.Windows;assembly=PresentationCore"
         xmlns:viewModels="clr-namespace:PhDThesis.HypergraphConstructor.Launcher.App.ViewModels"
         mc:Ignorable="d"
         Background="{x:Static SystemColors.ControlBrush}"
         Title="Hypergraph constructor app"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc"
                     Command="{Binding QuitCommand}" />
@@ -57,7 +53,7 @@
                 <Button Grid.Row="0"
                         Grid.Column="2"
                         Content="Построить"
-                        Command="{Binding ConstructHypergraphCommand}" />
+                        Command="{Binding ConstructHypergraphCommand, Mode=OneWay}" />
             </Grid>
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal">
@@ -69,7 +65,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0"
-                            Command="{Binding SetupSimplicesDimensionCommand}"
+                            Command="{Binding SetupSimplicesDimensionCommand, Mode=OneWay}"
                             Content="-">
                         <Button.CommandParameter>
                             <system:Int32>
@@ -81,7 +77,7 @@
                                Margin="5,0"
                                Text="{Binding SimplicesDimension, Mode=OneWay}" />
                     <Button Grid.Column="2"
-                            Command="{Binding SetupSimplicesDimensionCommand}"
+                            Command="{Binding SetupSimplicesDimensionCommand, Mode=OneWay}"
                             Content="+">
                         <Button.CommandParameter>
                             <system:Int32>
@@ -107,9 +103,38 @@
                                  Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
                                  CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Reduction}" />
             </StackPanel>
-            <controls:HomogenousHypergraphCanvas Grid.Row="3"
-                                                 Grid.Column="0"
-                                                 HomogenousHypergraphToShow="{Binding ConstructedHypergraph, Mode=OneWay}" />
+            <controls:Spinner Grid.Row="3"
+                              Grid.Column="0"
+                              SpinnerSize="550"
+                              SpinnerItemsCount="6"
+                              SpinnerItemsColor="Gray"
+                              Width="550"
+                              Height="550">
+                <controls:Spinner.Visibility>
+                    <MultiBinding Converter="{converters:FromBoolConverter}">
+                        <MultiBinding.Bindings>
+                            <Binding Path="RestorationOperationInProgress"
+                                     Mode="OneWay" />
+                            <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Visible}" />
+                            <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Collapsed}" />
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+                </controls:Spinner.Visibility>
+            </controls:Spinner>
+            <localControls:HomogenousHypergraphCanvas Grid.Row="3"
+                                                      Grid.Column="0"
+                                                      HomogenousHypergraphToShow="{Binding ConstructedHypergraph, Mode=OneWay}">
+                <localControls:HomogenousHypergraphCanvas.Visibility>
+                    <MultiBinding Converter="{converters:FromBoolConverter}">
+                        <MultiBinding.Bindings>
+                            <Binding Path="RestorationOperationInProgress"
+                                     Mode="OneWay" />
+                            <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Collapsed}" />
+                            <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Visible}" />
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+                </localControls:HomogenousHypergraphCanvas.Visibility>
+            </localControls:HomogenousHypergraphCanvas>
         </Grid>
         <StatusBar Grid.Row="2"
                    VerticalAlignment="Bottom"

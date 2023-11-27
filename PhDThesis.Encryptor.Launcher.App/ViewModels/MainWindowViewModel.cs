@@ -1,5 +1,5 @@
 ﻿using PhDThesis.Math.Domain;
-using Wpf.MVVM.Core.ViewModels;
+using Irbis.WPF.MVVM.Core.ViewModels;
 
 namespace PhDThesis.Encryptor.Launcher.App.ViewModels;
 

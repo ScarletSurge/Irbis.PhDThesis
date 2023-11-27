@@ -56,44 +56,52 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
         VerticesDegreesVector from,
         int simplicesDimension,
         uint verticesDegreesSum,
-        HashSet<HyperEdge> addedSimplices,
+        ISet<HyperEdge> addedSimplices,
         CancellationToken cancellationToken = default)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        
-        var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
-        
-        if (verticesDegreesSum == 0)
+        return Task.Run(() =>
         {
-            return Task.FromResult(new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplices.ToArray()));
-        }
+            var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
 
-        var lastAddedSimplex = addedSimplices.LastOrDefault();
-        var lastAddedSimplexIndex = lastAddedSimplex is null
-            ? -1
-            : HomogenousHypergraph.SimplexToBitIndex(lastAddedSimplex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
-
-        for (var nextSimplexToAddIndex = lastAddedSimplexIndex + 1; nextSimplexToAddIndex < simplicesMaxCount; nextSimplexToAddIndex++)
-        {
-            var simplexToAdd = HomogenousHypergraph.BitIndexToSimplex(nextSimplexToAddIndex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
-            if (!from.TryRemoveSimplex(simplexToAdd))
+            if (verticesDegreesSum == 0)
             {
-                continue;
+                return Task.FromResult(new HomogenousHypergraph(from.VerticesCount, simplicesDimension,
+                    addedSimplices.ToArray()));
             }
 
-            addedSimplices.Add(simplexToAdd);
+            var lastAddedSimplex = addedSimplices.LastOrDefault();
+            var lastAddedSimplexIndex = lastAddedSimplex is null
+                ? -1
+                : HomogenousHypergraph.SimplexToBitIndex(lastAddedSimplex, simplicesDimension, from.VerticesCount,
+                    simplicesMaxCount);
 
-            var restored = RestoreInnerRecursive(from, simplicesDimension, (uint)(verticesDegreesSum - simplicesDimension), addedSimplices);
-            if (restored is not null)
+            for (var nextSimplexToAddIndex = lastAddedSimplexIndex + 1;
+                 nextSimplexToAddIndex < simplicesMaxCount;
+                 nextSimplexToAddIndex++)
             {
-                return Task.FromResult(restored);
-            }
-            
-            addedSimplices.Remove(simplexToAdd);
-            from.AddSimplex(simplexToAdd);
-        }
+                cancellationToken.ThrowIfCancellationRequested();
+                var simplexToAdd = HomogenousHypergraph.BitIndexToSimplex(nextSimplexToAddIndex, simplicesDimension,
+                    from.VerticesCount, simplicesMaxCount);
+                if (!from.TryRemoveSimplex(simplexToAdd))
+                {
+                    continue;
+                }
 
-        return Task.FromResult(default(HomogenousHypergraph));
+                addedSimplices.Add(simplexToAdd);
+
+                var restored = RestoreInnerRecursiveAsync(from, simplicesDimension,
+                    (uint) (verticesDegreesSum - simplicesDimension), addedSimplices).GetAwaiter().GetResult();
+                if (restored is not null)
+                {
+                    return Task.FromResult(restored);
+                }
+
+                addedSimplices.Remove(simplexToAdd);
+                from.AddSimplex(simplexToAdd);
+            }
+
+            return Task.FromResult(default(HomogenousHypergraph));
+        }, cancellationToken);
     }
     
     #region PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides

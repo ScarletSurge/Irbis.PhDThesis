@@ -6,13 +6,22 @@
 public sealed class Guardant
 {
     
+    #region Singleton
+    
     /// <summary>
     /// 
     /// </summary>
     private static Guardant _instance = new ();
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public static Guardant Instance =>
         _instance;
+    
+    #endregion
+    
+    #region Constructors
     
     /// <summary>
     /// 
@@ -21,6 +30,10 @@ public sealed class Guardant
     {
         
     }
+    
+    #endregion
+    
+    #region Methods
     
     /// <summary>
     /// 
@@ -37,6 +50,28 @@ public sealed class Guardant
         string exceptionMessage)
     {
         if (predicate(value))
+        {
+            throw new GuardantException(exceptionMessage);
+        }
+
+        return this;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="predicate"></param>
+    /// <param name="exceptionMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="GuardantException"></exception>
+    public Guardant ThrowIfAny<T>(
+        IEnumerable<T?> value,
+        Predicate<T?> predicate,
+        string exceptionMessage)
+    {
+        if (value.Any(new Func<T?, bool>(predicate)))
         {
             throw new GuardantException(exceptionMessage);
         }
@@ -65,12 +100,12 @@ public sealed class Guardant
         IEnumerable<T> value)
     {
         //return ThrowIf(value, passedValue => !passedValue.Any())
-        if (value.Any())
+        if (!value.Any())
         {
-            return this;
+            throw new GuardantException("Value is empty enumerable.");
         }
         
-        throw new GuardantException("Value is empty enumerable.");
+        return this;
     }
     
     /// <summary>
@@ -81,7 +116,7 @@ public sealed class Guardant
     public Guardant ThrowIfNullOrEmpty<T>(
         IEnumerable<T>? value)
     {
-        return ThrowIfNull(value).ThrowIfEmpty(value);
+        return ThrowIfNull(value).ThrowIfEmpty(value!);
     }
     
     /// <summary>
@@ -98,10 +133,10 @@ public sealed class Guardant
     {
         if (!initialValue.Equals(valueToCompareWith))
         {
-            return this;
+            throw new GuardantException("Initial value is equal to other value by inner equality comparison.");
         }
-        
-        throw new GuardantException("Initial value equals to other value by inner equality comparison.");
+
+        return this;
     }
     
     /// <summary>
@@ -117,12 +152,12 @@ public sealed class Guardant
         T valueToCompareWith,
         IEqualityComparer<T> comparer)
     {
-        if (!comparer.Equals(initialValue, valueToCompareWith))
+        if (comparer.Equals(initialValue, valueToCompareWith))
         {
-            return this;
+            throw new GuardantException("Initial value is equal to other value by outer equality comparison.");
         }
-        
-        throw new GuardantException("Initial value equals to other value by outer equality comparison.");
+
+        return this;
     }
     
     /// <summary>
@@ -137,12 +172,12 @@ public sealed class Guardant
         T valueToCompareWith)
         where T : IEquatable<T>
     {
-        if (initialValue.Equals(valueToCompareWith))
+        if (!initialValue.Equals(valueToCompareWith))
         {
-            return this;
+            throw new GuardantException("Initial value is not equal to other value by inner equality comparison.");
         }
         
-        throw new GuardantException("Initial value not equals to other value by inner equality comparison.");
+        return this;
     }
     
     /// <summary>
@@ -158,12 +193,12 @@ public sealed class Guardant
         T valueToCompareWith,
         IEqualityComparer<T> comparer)
     {
-        if (comparer.Equals(initialValue, valueToCompareWith))
+        if (!comparer.Equals(initialValue, valueToCompareWith))
         {
-            return this;
+            throw new GuardantException("Initial value is not equal to other value by outer equality comparison.");
         }
-        
-        throw new GuardantException("Initial value not equals to other value by outer equality comparison.");
+
+        return this;
     }
 
     /// <summary>
@@ -178,12 +213,12 @@ public sealed class Guardant
         T valueToCompareWith)
         where T : IComparable<T>
     {
-        if (initialValue.CompareTo(valueToCompareWith) >= 0)
+        if (initialValue.CompareTo(valueToCompareWith) < 0)
         {
-            return this;
+            throw new GuardantException("Initial value is LT other value by inner comparison.");
         }
 
-        throw new GuardantException("Initial value is LT other value by inner comparison.");
+        return this;
     }
     
     /// <summary>
@@ -199,12 +234,12 @@ public sealed class Guardant
         T valueToCompareWith,
         IComparer<T> comparer)
     {
-        if (comparer.Compare(initialValue, valueToCompareWith) >= 0)
+        if (comparer.Compare(initialValue, valueToCompareWith) < 0)
         {
-            return this;
+            throw new GuardantException("Initial value is LT other value by outer comparison.");
         }
 
-        throw new GuardantException("Initial value is LT other value by outer comparison.");
+        return this;
     }
 
     /// <summary>
@@ -215,57 +250,57 @@ public sealed class Guardant
     /// <typeparam name="T"></typeparam>
     /// <exception cref="GuardantException"></exception>
     public Guardant ThrowIfLowerThanOrEqualTo<T>(
-        T initialValue,
-        T valueToCompareWith)
-        where T: IComparable<T>
-    {
-        if (initialValue.CompareTo(valueToCompareWith) > 0)
-        {
-            return this;
-        }
-
-        throw new GuardantException("Initial value is LT or EQ to other value by inner comparison.");
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="initialValue"></param>
-    /// <param name="valueToCompareWith"></param>
-    /// <param name="comparer"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardantException"></exception>
-    public Guardant ThrowIfLowerThanOrEqualTo<T>(
-        T initialValue,
-        T valueToCompareWith,
-        IComparer<T> comparer)
-    {
-        if (comparer.Compare(initialValue, valueToCompareWith) > 0)
-        {
-            return this;
-        }
-
-        throw new GuardantException("Initial value is LT or EQ to other value by outer comparison.");
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="initialValue"></param>
-    /// <param name="valueToCompareWith"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <exception cref="GuardantException"></exception>
-    public Guardant ThrowIfGreaterThan<T>(
         T initialValue,
         T valueToCompareWith)
         where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) <= 0)
         {
-            return this;
+            throw new GuardantException("Initial value is LT or EQ to other value by inner comparison.");
         }
 
-        throw new GuardantException("Initial value is GT other value by inner comparison.");
+        return this;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="initialValue"></param>
+    /// <param name="valueToCompareWith"></param>
+    /// <param name="comparer"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <exception cref="GuardantException"></exception>
+    public Guardant ThrowIfLowerThanOrEqualTo<T>(
+        T initialValue,
+        T valueToCompareWith,
+        IComparer<T> comparer)
+    {
+        if (comparer.Compare(initialValue, valueToCompareWith) <= 0)
+        {
+            throw new GuardantException("Initial value is LT or EQ to other value by outer comparison.");
+        }
+
+        return this;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="initialValue"></param>
+    /// <param name="valueToCompareWith"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <exception cref="GuardantException"></exception>
+    public Guardant ThrowIfGreaterThan<T>(
+        T initialValue,
+        T valueToCompareWith)
+        where T: IComparable<T>
+    {
+        if (initialValue.CompareTo(valueToCompareWith) > 0)
+        {
+            throw new GuardantException("Initial value is GT other value by inner comparison.");
+        }
+
+        return this;
     }
     
     /// <summary>
@@ -281,12 +316,12 @@ public sealed class Guardant
         T valueToCompareWith,
         IComparer<T> comparer)
     {
-        if (comparer.Compare(initialValue, valueToCompareWith) <= 0)
+        if (comparer.Compare(initialValue, valueToCompareWith) > 0)
         {
-            return this;
+            throw new GuardantException("Initial value is GT other value by outer comparison.");
         }
 
-        throw new GuardantException("Initial value is GT other value by outer comparison.");
+        return this;
     }
     
     /// <summary>
@@ -301,12 +336,12 @@ public sealed class Guardant
         T valueToCompareWith)
         where T: IComparable<T>
     {
-        if (initialValue.CompareTo(valueToCompareWith) < 0)
+        if (initialValue.CompareTo(valueToCompareWith) >= 0)
         {
-            return this;
+            throw new GuardantException("Initial value is GT or EQ to other value by inner comparison.");
         }
-
-        throw new GuardantException("Initial value is GT or EQ to other value by inner comparison.");
+        
+        return this;
     }
     
     /// <summary>
@@ -322,12 +357,14 @@ public sealed class Guardant
         T valueToCompareWith,
         IComparer<T> comparer)
     {
-        if (comparer.Compare(initialValue, valueToCompareWith) < 0)
+        if (comparer.Compare(initialValue, valueToCompareWith) >= 0)
         {
-            return this;
+            throw new GuardantException("Initial value is GT or EQ to other value by outer comparison.");
         }
 
-        throw new GuardantException("Initial value is GT or EQ to other value by outer comparison.");
+        return this;
     }
+    
+    #endregion
     
 }

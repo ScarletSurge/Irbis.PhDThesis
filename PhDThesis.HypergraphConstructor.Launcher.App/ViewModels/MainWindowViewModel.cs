@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Wpf.MVVM.Core.Commands;
-using Wpf.MVVM.Core.ViewModels;
+using Irbis.WPF.MVVM.Core.Commands;
+using Irbis.WPF.MVVM.Core.ViewModels;
 
 using PhDThesis.Domain.Extensions;
 using PhDThesis.Math.Domain;
@@ -29,29 +30,34 @@ internal sealed class MainWindowViewModel
     /// <summary>
     /// 
     /// </summary>
-    private Lazy<ICommand> _quitCommand;
+    private readonly Lazy<ICommand> _quitCommand;
     
     /// <summary>
     /// 
     /// </summary>
-    private Lazy<ICommand> _showHelpCommand;
+    private readonly Lazy<ICommand> _showHelpCommand;
     
     /// <summary>
     /// 
     /// </summary>
-    private Lazy<ICommand> _setupSimplicesDimensionCommand;
+    private readonly Lazy<ICommand> _setupSimplicesDimensionCommand;
     
     /// <summary>
     /// 
     /// </summary>
-    private Lazy<ICommand> _setupRestorationAlgorithmCommand;
+    private readonly Lazy<ICommand> _setupRestorationAlgorithmCommand;
     
     /// <summary>
     /// 
     /// </summary>
-    private Lazy<ICommand> _constructHypergraphCommand;
+    private readonly Lazy<ICommand> _constructHypergraphCommand;
     
     #endregion
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private bool _restorationOperationInProgress;
     
     /// <summary>
     /// 
@@ -97,7 +103,7 @@ internal sealed class MainWindowViewModel
         _showHelpCommand = new Lazy<ICommand>(new RelayCommand(_ => ShowHelpCommandAction()));
         _setupSimplicesDimensionCommand = new Lazy<ICommand>(new RelayCommand(param => SetupSimplicesDimensionCommandAction((int)param)));
         _setupRestorationAlgorithmCommand = new Lazy<ICommand>(new RelayCommand(param => SetupRestorationAlgorithmCommandAction((RestorationAlgorithmFromVerticesDegreesVector)param)));
-        _constructHypergraphCommand = new Lazy<ICommand>(new RelayCommand(_ => ConstructHypergraphCommandAction().GetAwaiter().GetResult()));
+        _constructHypergraphCommand = new Lazy<ICommand>(new AsyncRelayCommand(_ => ConstructHypergraphAsyncCommandAction()));
     }
 
     #endregion
@@ -137,6 +143,24 @@ internal sealed class MainWindowViewModel
         _constructHypergraphCommand.Value;
     
     #endregion
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool RestorationOperationInProgress
+    {
+        get =>
+            _restorationOperationInProgress;
+
+        //private set =>
+        //    SetProperty(ref _restorationOperationInProgress, value);
+
+        private set
+        {
+            _restorationOperationInProgress = value;
+            OnPropertyChanged(nameof(RestorationOperationInProgress));
+        }
+    }
     
     /// <summary>
     /// 
@@ -249,14 +273,16 @@ internal sealed class MainWindowViewModel
     /// <summary>
     /// 
     /// </summary>
-    private async Task ConstructHypergraphCommandAction()
+    /// <param name="cancellationToken"></param>
+    private async Task ConstructHypergraphAsyncCommandAction(
+        CancellationToken cancellationToken = default)
     {
         var verticesDegreesStrings =
             VerticesDegreesVectorString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
         if (verticesDegreesStrings.Length == 0)
         {
-            MessageBox.Show("");
+            MessageBox.Show("Invalid vertices degrees vector!");
 
             return;
         }
@@ -279,18 +305,25 @@ internal sealed class MainWindowViewModel
 
         if (!parsed)
         {
-            MessageBox.Show("");
+            MessageBox.Show("Invalid vertices degrees vector!");
 
             return;
         }
 
         try
         {
-            ConstructedHypergraph = await _reconstructors[_restorationAlgorithm].RestoreAsync(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension);
+            RestorationOperationInProgress = true;
+            ConstructedHypergraph = await _reconstructors[RestorationAlgorithm]
+                .RestoreAsync(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension, cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            MessageBox.Show("");
+            RestorationOperationInProgress = false;
+            MessageBox.Show("Vertices degrees vector couldn't be restored into hypergraph.");
+        }
+        finally
+        {
+            RestorationOperationInProgress = false;
         }
     }
 

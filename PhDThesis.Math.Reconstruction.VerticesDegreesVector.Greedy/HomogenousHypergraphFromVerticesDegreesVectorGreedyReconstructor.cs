@@ -175,40 +175,45 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
         int simplicesDimension,
         CancellationToken cancellationToken = default)
     {
-        var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
-        var simplicesTargetCount = from.Sum(x => x) / simplicesDimension;
-        var addedSimplicesSequence = new Stack<(int, HyperEdge)>();
-        var addedSimplicesHashSet = new HashSet<int>();
-        var currentSimplexToAddIndex = -1;
-
-        while (addedSimplicesSequence.Count != simplicesTargetCount)
+        return Task.Run(() =>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            
-            while (++currentSimplexToAddIndex == simplicesMaxCount)
+            var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
+            var simplicesTargetCount = from.Sum(x => x) / simplicesDimension;
+            var addedSimplicesSequence = new Stack<(int, HyperEdge)>();
+            var addedSimplicesHashSet = new HashSet<int>();
+            var currentSimplexToAddIndex = -1;
+
+            while (addedSimplicesSequence.Count != simplicesTargetCount)
             {
-                if (addedSimplicesSequence.Count == 0)
+                cancellationToken.ThrowIfCancellationRequested();
+
+                while (++currentSimplexToAddIndex == simplicesMaxCount)
                 {
-                    return null;
+                    if (addedSimplicesSequence.Count == 0)
+                    {
+                        return Task.FromResult<HomogenousHypergraph?>(null);
+                    }
+
+                    var poppedSimplex = addedSimplicesSequence.Pop();
+                    addedSimplicesHashSet.Remove(currentSimplexToAddIndex = poppedSimplex.Item1);
+                    from.AddSimplex(poppedSimplex.Item2);
                 }
 
-                var poppedSimplex = addedSimplicesSequence.Pop();
-                addedSimplicesHashSet.Remove(currentSimplexToAddIndex = poppedSimplex.Item1);
-                from.AddSimplex(poppedSimplex.Item2);
-            }
-            
-            if (!addedSimplicesHashSet.Contains(currentSimplexToAddIndex))
-            {
-                var simplexToPush = HomogenousHypergraph.BitIndexToSimplex(currentSimplexToAddIndex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
-                if (from.TryRemoveSimplex(simplexToPush))
+                if (!addedSimplicesHashSet.Contains(currentSimplexToAddIndex))
                 {
-                    addedSimplicesSequence.Push((currentSimplexToAddIndex, simplexToPush));
-                    addedSimplicesHashSet.Add(currentSimplexToAddIndex);
+                    var simplexToPush = HomogenousHypergraph.BitIndexToSimplex(currentSimplexToAddIndex,
+                        simplicesDimension, from.VerticesCount, simplicesMaxCount);
+                    if (from.TryRemoveSimplex(simplexToPush))
+                    {
+                        addedSimplicesSequence.Push((currentSimplexToAddIndex, simplexToPush));
+                        addedSimplicesHashSet.Add(currentSimplexToAddIndex);
+                    }
                 }
             }
-        }
 
-        return Task.FromResult<HomogenousHypergraph?>(new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplicesSequence.Select(x => x.Item2).ToArray()));
+            return Task.FromResult<HomogenousHypergraph?>(new HomogenousHypergraph(from.VerticesCount,
+                simplicesDimension, addedSimplicesSequence.Select(x => x.Item2).ToArray()));
+        }, cancellationToken);
     }
     
     #endregion
