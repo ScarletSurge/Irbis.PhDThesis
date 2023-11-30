@@ -7,18 +7,15 @@ public sealed class Guardant
 {
     
     #region Singleton
-    
+
     /// <summary>
     /// 
     /// </summary>
-    private static Guardant _instance = new ();
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    public static Guardant Instance =>
-        _instance;
-    
+    public static Guardant Instance
+    {
+        get;
+    } = new ();
+
     #endregion
     
     #region Constructors
@@ -131,7 +128,7 @@ public sealed class Guardant
         T valueToCompareWith)
         where T : IEquatable<T>
     {
-        if (!initialValue.Equals(valueToCompareWith))
+        if (initialValue.Equals(valueToCompareWith))
         {
             throw new GuardantException("Initial value is equal to other value by inner equality comparison.");
         }

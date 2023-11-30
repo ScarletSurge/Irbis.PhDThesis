@@ -20,7 +20,8 @@ namespace PhDThesis.HypergraphConstructor.Launcher.App.ViewModels;
 /// 
 /// </summary>
 internal sealed class MainWindowViewModel
-    : ViewModelBase
+    : ViewModelBase,
+      IDisposable
 {
 
     #region Fields
@@ -83,6 +84,11 @@ internal sealed class MainWindowViewModel
     /// 
     /// </summary>
     private readonly IReadOnlyDictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorReconstructorBase> _reconstructors;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private CancellationTokenSource _restorationOperationCancellationSource;
 
     #endregion
 
@@ -103,7 +109,8 @@ internal sealed class MainWindowViewModel
         _showHelpCommand = new Lazy<ICommand>(new RelayCommand(_ => ShowHelpCommandAction()));
         _setupSimplicesDimensionCommand = new Lazy<ICommand>(new RelayCommand(param => SetupSimplicesDimensionCommandAction((int)param)));
         _setupRestorationAlgorithmCommand = new Lazy<ICommand>(new RelayCommand(param => SetupRestorationAlgorithmCommandAction((RestorationAlgorithmFromVerticesDegreesVector)param)));
-        _constructHypergraphCommand = new Lazy<ICommand>(new AsyncRelayCommand(_ => ConstructHypergraphAsyncCommandAction()));
+        _constructHypergraphCommand = new Lazy<ICommand>(new AsyncRelayCommand(_ => ConstructHypergraphAsyncCommandAction(_restorationOperationCancellationSource.Token)));
+        _restorationOperationCancellationSource = new CancellationTokenSource();
     }
 
     #endregion
@@ -152,14 +159,8 @@ internal sealed class MainWindowViewModel
         get =>
             _restorationOperationInProgress;
 
-        //private set =>
-        //    SetProperty(ref _restorationOperationInProgress, value);
-
-        private set
-        {
-            _restorationOperationInProgress = value;
-            OnPropertyChanged(nameof(RestorationOperationInProgress));
-        }
+        private set =>
+            SetProperty(ref _restorationOperationInProgress, value);
     }
     
     /// <summary>
@@ -170,11 +171,8 @@ internal sealed class MainWindowViewModel
         private get =>
             _verticesDegreesVectorString;
 
-        set
-        {
-            _verticesDegreesVectorString = value;
-            OnPropertyChanged(nameof(VerticesDegreesVectorString));
-        }
+        set =>
+            SetProperty(ref _verticesDegreesVectorString, value);
     }
     
     /// <summary>
@@ -184,12 +182,9 @@ internal sealed class MainWindowViewModel
     {
         private get =>
             _restorationAlgorithm;
-        
-        set
-        {
-            _restorationAlgorithm = value;
-            OnPropertyChanged(nameof(RestorationAlgorithm));
-        }
+
+        set =>
+            SetProperty(ref _restorationAlgorithm, value);
     }
     
     /// <summary>
@@ -200,11 +195,8 @@ internal sealed class MainWindowViewModel
         get =>
             _simplicesDimension;
 
-        set
-        {
-            _simplicesDimension = value;
-            OnPropertyChanged(nameof(SimplicesDimension));
-        }
+        set =>
+            SetProperty(ref _simplicesDimension, value);
     }
 
     /// <summary>
@@ -215,11 +207,8 @@ internal sealed class MainWindowViewModel
         get =>
             _constructedHypergraph;
 
-        private set
-        {
-            _constructedHypergraph = value;
-            OnPropertyChanged(nameof(ConstructedHypergraph));
-        }
+        private set =>
+            SetProperty(ref _constructedHypergraph, value);
     }
 
     #endregion
@@ -277,6 +266,12 @@ internal sealed class MainWindowViewModel
     private async Task ConstructHypergraphAsyncCommandAction(
         CancellationToken cancellationToken = default)
     {
+        if (RestorationOperationInProgress)
+        {
+            _restorationOperationCancellationSource.Cancel();
+            return;
+        }
+        
         var verticesDegreesStrings =
             VerticesDegreesVectorString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -316,6 +311,11 @@ internal sealed class MainWindowViewModel
             ConstructedHypergraph = await _reconstructors[RestorationAlgorithm]
                 .RestoreAsync(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension, cancellationToken);
         }
+        catch (OperationCanceledException)
+        {
+            _restorationOperationCancellationSource.Dispose();
+            _restorationOperationCancellationSource = new CancellationTokenSource();
+        }
         catch (Exception)
         {
             RestorationOperationInProgress = false;
@@ -328,6 +328,26 @@ internal sealed class MainWindowViewModel
     }
 
     #endregion
+    
+    #endregion
+    
+    #region System.IDisposable implementation
+    
+    /// <inheritdoc cref="IDisposable.Dispose" />
+    public void Dispose()
+    {
+        _restorationOperationCancellationSource.Cancel();
+        GC.SuppressFinalize(this);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    ~MainWindowViewModel()
+    {
+        _restorationOperationCancellationSource?.Cancel();
+        _restorationOperationCancellationSource?.Dispose();
+    }
     
     #endregion
 

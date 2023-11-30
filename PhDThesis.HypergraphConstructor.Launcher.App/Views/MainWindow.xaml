@@ -12,7 +12,7 @@
         xmlns:viewModels="clr-namespace:PhDThesis.HypergraphConstructor.Launcher.App.ViewModels"
         mc:Ignorable="d"
         Background="{x:Static SystemColors.ControlBrush}"
-        Title="Hypergraph constructor app"
+        Title="Восстановление гиперграфа по вектору степеней его вершин"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}">
     <Window.InputBindings>
@@ -32,6 +32,33 @@
         </Menu>
         <Grid Grid.Row="1"
               Margin="5">
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <Style x:Key="DisabledIfRestorationOperationInProgress"
+                           TargetType="{x:Type Control}">
+                        <Style.Setters>
+                            <Setter Property="IsEnabled">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{converters:EqualityCombinatorConverter}"
+                                                  ConverterParameter="{x:Static converters:EqualityCombinatorConverter+Operators.Equal}">
+                                        <MultiBinding.Bindings>
+                                            <Binding Path="RestorationOperationInProgress"
+                                                     Mode="OneWay" />
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Boolean>
+                                                        False
+                                                    </system:Boolean>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding.Bindings>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style.Setters>
+                    </Style>
+                </ResourceDictionary>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -49,11 +76,40 @@
                            Text="Вектор степеней вершин: " />
                 <TextBox Grid.Row="0"
                          Grid.Column="1"
+                         Style="{StaticResource DisabledIfRestorationOperationInProgress}"
                          Text="{Binding VerticesDegreesVectorString, Mode=OneWayToSource}" />
                 <Button Grid.Row="0"
                         Grid.Column="2"
-                        Content="Построить"
-                        Command="{Binding ConstructHypergraphCommand, Mode=OneWay}" />
+                        Command="{Binding ConstructHypergraphCommand, Mode=OneWay}">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RestorationOperationInProgress, Mode=OneWay}">
+                                    <DataTrigger.Value>
+                                        <system:Boolean>
+                                            False
+                                        </system:Boolean>
+                                    </DataTrigger.Value>
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Content"
+                                                Value="Построить" />
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RestorationOperationInProgress, Mode=OneWay}">
+                                    <DataTrigger.Value>
+                                        <system:Boolean>
+                                            True
+                                        </system:Boolean>
+                                    </DataTrigger.Value>
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Content"
+                                                Value="Остановить" />
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </Grid>
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal">
@@ -65,6 +121,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0"
+                            Style="{StaticResource DisabledIfRestorationOperationInProgress}"
                             Command="{Binding SetupSimplicesDimensionCommand, Mode=OneWay}"
                             Content="-">
                         <Button.CommandParameter>
@@ -77,6 +134,7 @@
                                Margin="5,0"
                                Text="{Binding SimplicesDimension, Mode=OneWay}" />
                     <Button Grid.Column="2"
+                            Style="{StaticResource DisabledIfRestorationOperationInProgress}"
                             Command="{Binding SetupSimplicesDimensionCommand, Mode=OneWay}"
                             Content="+">
                         <Button.CommandParameter>
@@ -90,7 +148,9 @@
             <StackPanel Grid.Row="2"
                             Orientation="Horizontal">
                 <TextBlock Text="Алгоритм восстановления: " />
-                <RadioButton GroupName="RestorationAlgorithm"
+                <RadioButton Margin="0,0,10,0"
+                             GroupName="RestorationAlgorithm"
+                             Style="{StaticResource DisabledIfRestorationOperationInProgress}"
                              Content="Жадный"
                              Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
                              CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Greedy}">
@@ -98,10 +158,11 @@
                         True
                     </RadioButton.IsChecked>
                 </RadioButton>
-                    <RadioButton GroupName="RestorationAlgorithm"
-                                 Content="Редукционный"
-                                 Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
-                                 CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Reduction}" />
+                <RadioButton GroupName="RestorationAlgorithm"
+                             Style="{StaticResource DisabledIfRestorationOperationInProgress}"
+                             Content="Редукционный"
+                             Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
+                             CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Reduction}" />
             </StackPanel>
             <controls:Spinner Grid.Row="3"
                               Grid.Column="0"
