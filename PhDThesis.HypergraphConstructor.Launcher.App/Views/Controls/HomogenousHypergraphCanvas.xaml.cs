@@ -12,7 +12,8 @@ namespace PhDThesis.HypergraphConstructor.Launcher.App.Views.Controls;
 /// <summary>
 /// 
 /// </summary>
-public partial class HomogenousHypergraphCanvas : UserControl
+public partial class HomogenousHypergraphCanvas:
+    UserControl
 {
     
     // TODO: move to dependency properties

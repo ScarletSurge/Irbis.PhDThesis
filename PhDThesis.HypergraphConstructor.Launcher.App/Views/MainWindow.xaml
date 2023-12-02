@@ -15,6 +15,9 @@
         Title="Восстановление гиперграфа по вектору степеней его вершин"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Key="Esc"
                     Command="{Binding QuitCommand}" />
@@ -166,11 +169,7 @@
             </StackPanel>
             <controls:Spinner Grid.Row="3"
                               Grid.Column="0"
-                              SpinnerSize="550"
-                              SpinnerItemsCount="6"
-                              SpinnerItemsColor="Gray"
-                              Width="550"
-                              Height="550">
+                              SpinnerItemsColor="Gray">
                 <controls:Spinner.Visibility>
                     <MultiBinding Converter="{converters:FromBoolConverter}">
                         <MultiBinding.Bindings>

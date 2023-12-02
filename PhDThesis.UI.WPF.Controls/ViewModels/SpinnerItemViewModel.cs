@@ -10,49 +10,60 @@ public sealed class SpinnerItemViewModel:
 {
     
     #region Fields
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
     private double _x;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     private double _y;
-    private double _angle;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private double _size;
     
     #endregion
     
     #region Properties
     
+    /// <summary>
+    /// 
+    /// </summary>
     public double X
     {
         get =>
             _x;
 
-        set
-        {
-            _x = value;
-            OnPropertyChanged(nameof(X));
-        }
+        set =>
+            SetProperty(ref _x, value);
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public double Y
     {
         get =>
             _y;
 
-        set
-        {
-            _y = value;
-            OnPropertyChanged(nameof(Y));
-        }
+        set =>
+            SetProperty(ref _y, value);
     }
-
-    public double Angle
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public double Size
     {
         get =>
-            _angle;
+            _size;
 
-        set
-        {
-            _angle = value;
-            OnPropertyChanged(nameof(Angle));
-        }
+        set =>
+            SetProperty(ref _size, value);
     }
     
     #endregion

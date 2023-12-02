@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+
 using PhDThesis.Domain.Helpers.Guarding;
 
 namespace PhDThesis.Math.Domain.Fraction;
@@ -36,19 +37,20 @@ public static class FractionExtensions
     /// </summary>
     /// <param name="continuedFraction"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public static Fraction ToFraction(
         this IEnumerable<BigInteger> continuedFraction)
     {
         Guardant.Instance
             .ThrowIfNullOrEmpty(continuedFraction);
 
+        var continuedFractionComponents = continuedFraction.ToArray();
+
         var previousNumerator = BigInteger.One;
         var previousDenominator = BigInteger.Zero;
-        var currentNumerator = continuedFraction.First();
+        var currentNumerator = continuedFractionComponents.First();
         var currentDenominator = BigInteger.One;
 
-        foreach (var continuedFractionCoefficient in continuedFraction.Skip(1))
+        foreach (var continuedFractionCoefficient in continuedFractionComponents.Skip(1))
         {
             var nextNumerator = continuedFractionCoefficient * currentNumerator + previousNumerator;
             previousNumerator = currentNumerator;

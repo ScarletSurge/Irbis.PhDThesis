@@ -13,6 +13,8 @@ public readonly struct Fraction:
     IComparable<Fraction>
 {
     
+    #region Constructors
+    
     /// <summary>
     /// 
     /// </summary>
@@ -27,6 +29,10 @@ public readonly struct Fraction:
         
         (Numerator, Denominator) = Reduct(numerator, denominator);
     }
+    
+    #endregion
+    
+    #region Properties
     
     /// <summary>
     /// 
@@ -43,6 +49,10 @@ public readonly struct Fraction:
     {
         get;
     }
+    
+    #endregion
+    
+    #region methods
 
     /// <summary>
     /// 
@@ -69,6 +79,21 @@ public readonly struct Fraction:
         
         return (reductedNumerator, reductedDenominator);
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="numerator"></param>
+    /// <param name="denominator"></param>
+    public void Deconstruct(
+        out BigInteger numerator,
+        out BigInteger denominator)
+    {
+        numerator = Numerator;
+        denominator = Denominator;
+    }
+    
+    #region Arithmetic
     
     /// <summary>
     /// 
@@ -150,17 +175,26 @@ public readonly struct Fraction:
     {
         return Multiply(leftMultiplier, rightMultiplier);
     }
-
+    
+    #endregion
+    
+    #endregion
+    
+    #region System.Object overrides
+    
+    /// <inheritdoc cref="object.ToString" />
     public override string ToString()
     {
         return $"[{Numerator}/{Denominator}]";
     }
     
+    /// <inheritdoc cref="object.GetHashCode" />
     public override int GetHashCode()
     {
         return HashCode.Combine(Numerator, Denominator);
     }
     
+    /// <inheritdoc cref="object.Equals(object?)" />
     public override bool Equals(
         object? obj)
     {
@@ -176,28 +210,54 @@ public readonly struct Fraction:
 
         return false;
     }
-
+    
+    #endregion
+    
+    #region System.IEquatable<PhDThesis.Math.Domain.Fraction.Fraction> implementation
+    
+    /// <inheritdoc cref="IEquatable{T}.Equals(T?)" />
     public bool Equals(
         Fraction fraction)
     {
         return Numerator.Equals(fraction.Numerator) &&
                Denominator.Equals(fraction.Denominator);
     }
-
+    
+    #endregion
+    
+    #region Equality operators implementation
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leftOperand"></param>
+    /// <param name="rightOperand"></param>
+    /// <returns></returns>
     public static bool operator ==(
         Fraction leftOperand,
         Fraction rightOperand)
     {
         return leftOperand.Equals(rightOperand);
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leftOperand"></param>
+    /// <param name="rightOperand"></param>
+    /// <returns></returns>
     public static bool operator !=(
         Fraction leftOperand,
         Fraction rightOperand)
     {
         return !leftOperand.Equals(rightOperand);
     }
-
+    
+    #endregion
+    
+    #region System.IComparable implementation
+    
+    /// <inheritdoc cref="IComparable.CompareTo" />
     public int CompareTo(
         object? obj)
     {
@@ -213,52 +273,74 @@ public readonly struct Fraction:
 
         throw new ArgumentException("Can't compare objects", nameof(obj));
     }
-
+    
+    #endregion
+    
+    #region System.IComparable<in T> implementation
+    
+    /// <inheritdoc cref="IComparable{T}.CompareTo" />
     public int CompareTo(
         Fraction fraction)
     {
         return (Numerator * fraction.Denominator).CompareTo(Denominator * fraction.Numerator);
     }
-
+    
+    #endregion
+    
+    #region Comparison operators implementation
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leftOperand"></param>
+    /// <param name="rightOperand"></param>
+    /// <returns></returns>
     public static bool operator <(
         Fraction leftOperand,
         Fraction rightOperand)
     {
         return leftOperand.CompareTo(rightOperand) < 0;
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leftOperand"></param>
+    /// <param name="rightOperand"></param>
+    /// <returns></returns>
     public static bool operator <=(
         Fraction leftOperand,
         Fraction rightOperand)
     {
         return leftOperand.CompareTo(rightOperand) <= 0;
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leftOperand"></param>
+    /// <param name="rightOperand"></param>
+    /// <returns></returns>
     public static bool operator >(
         Fraction leftOperand,
         Fraction rightOperand)
     {
         return leftOperand.CompareTo(rightOperand) > 0;
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leftOperand"></param>
+    /// <param name="rightOperand"></param>
+    /// <returns></returns>
     public static bool operator >=(
         Fraction leftOperand,
         Fraction rightOperand)
     {
         return leftOperand.CompareTo(rightOperand) >= 0;
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="numerator"></param>
-    /// <param name="denominator"></param>
-    public void Deconstruct(
-        out BigInteger numerator,
-        out BigInteger denominator)
-    {
-        numerator = Numerator;
-        denominator = Denominator;
-    }
     
+    #endregion
+
 }

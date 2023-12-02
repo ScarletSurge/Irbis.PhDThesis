@@ -68,7 +68,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
                 return Task.FromResult(new HomogenousHypergraph(from.VerticesCount, simplicesDimension,
                     addedSimplices.ToArray()));
             }
-
+            
             var lastAddedSimplex = addedSimplices.LastOrDefault();
             var lastAddedSimplexIndex = lastAddedSimplex is null
                 ? -1
@@ -90,7 +90,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
                 addedSimplices.Add(simplexToAdd);
 
                 var restored = RestoreInnerRecursiveAsync(from, simplicesDimension,
-                    (uint) (verticesDegreesSum - simplicesDimension), addedSimplices).GetAwaiter().GetResult();
+                    (uint) (verticesDegreesSum - simplicesDimension), addedSimplices, cancellationToken).GetAwaiter().GetResult();
                 if (restored is not null)
                 {
                     return Task.FromResult(restored);
@@ -100,7 +100,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
                 from.AddSimplex(simplexToAdd);
             }
 
-            return Task.FromResult(default(HomogenousHypergraph));
+            return Task<HomogenousHypergraph?>.FromResult(default(HomogenousHypergraph?));
         }, cancellationToken);
     }
     

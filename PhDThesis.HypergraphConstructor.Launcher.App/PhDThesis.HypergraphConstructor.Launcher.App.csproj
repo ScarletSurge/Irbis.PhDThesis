@@ -13,4 +13,8 @@
       <ProjectReference Include="..\PhDThesis.UI.WPF.Controls\PhDThesis.UI.WPF.Controls.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ViewModels\Design" />
+    </ItemGroup>
+
 </Project>
