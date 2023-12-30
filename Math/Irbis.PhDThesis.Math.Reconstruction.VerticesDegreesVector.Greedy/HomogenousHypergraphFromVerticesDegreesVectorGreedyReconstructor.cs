@@ -2,7 +2,7 @@
 using Irbis.PhDThesis.Math.Domain;
 using Irbis.PhDThesis.Math.Domain.Reconstruction;
 
-namespace Irbis.PhDThesis.Math.Reconstruction.Greedy;
+namespace Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy;
 
 /// <summary>
 /// 
@@ -23,7 +23,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     /// <returns></returns>
     [Obsolete]
     private HomogenousHypergraph? RestoreInnerRecursive(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         uint verticesDegreesSum,
         HashSet<HyperEdge> addedSimplices)
@@ -74,7 +74,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     /// <returns></returns>
     [Obsolete]
     private async Task<HomogenousHypergraph?> RestoreInnerRecursiveAsync(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         uint verticesDegreesSum,
         HashSet<HyperEdge> addedSimplices,
@@ -128,7 +128,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     /// <param name="simplicesDimension"></param>
     /// <returns></returns>
     private HomogenousHypergraph? RestoreInnerIterative(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension)
     {
         var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
@@ -171,7 +171,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     private Task<HomogenousHypergraph?> RestoreInnerIterativeAsync(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         CancellationToken cancellationToken = default)
     {
@@ -218,23 +218,23 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstru
     
     #endregion
     
-    #region PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
+    #region Irbis.PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.Restore" />
     protected override HomogenousHypergraph? RestoreInner(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension)
     {
-        return RestoreInnerIterative((VerticesDegreesVector)from.Clone(), simplicesDimension);
+        return RestoreInnerIterative((Domain.VerticesDegreesVector)from.Clone(), simplicesDimension);
     }
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreAsync"/>
     protected override Task<HomogenousHypergraph?> RestoreInnerAsync(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         CancellationToken cancellationToken = default)
     {
-        return RestoreInnerIterativeAsync((VerticesDegreesVector)from.Clone(), simplicesDimension, cancellationToken);
+        return RestoreInnerIterativeAsync((Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, cancellationToken);
     }
     
     #endregion

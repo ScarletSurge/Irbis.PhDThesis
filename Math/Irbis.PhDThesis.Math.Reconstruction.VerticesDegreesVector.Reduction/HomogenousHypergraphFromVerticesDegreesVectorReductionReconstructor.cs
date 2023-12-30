@@ -2,7 +2,7 @@
 using Irbis.PhDThesis.Math.Domain;
 using Irbis.PhDThesis.Math.Domain.Reconstruction;
 
-namespace Irbis.PhDThesis.Math.Reconstruction.Reduction;
+namespace Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction;
 
 /// <summary>
 /// 
@@ -12,7 +12,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
 {
     
     private HomogenousHypergraph? RestoreInnerRecursive(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         uint verticesDegreesSum,
         HashSet<HyperEdge> addedSimplices)
@@ -53,7 +53,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
     }
     
     private Task<HomogenousHypergraph?> RestoreInnerRecursiveAsync(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         uint verticesDegreesSum,
         ISet<HyperEdge> addedSimplices,
@@ -99,28 +99,28 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
                 addedSimplices.Remove(simplexToAdd);
                 from.AddSimplex(simplexToAdd);
             }
-
+            
             return Task<HomogenousHypergraph?>.FromResult(default(HomogenousHypergraph?));
         }, cancellationToken);
     }
     
-    #region PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
+    #region Irbis.PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreInner" />
     protected override HomogenousHypergraph? RestoreInner(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension)
     {
-        return RestoreInnerRecursive((VerticesDegreesVector)from.Clone(), simplicesDimension, (uint)from.Sum(x => x), new HashSet<HyperEdge>());
+        return RestoreInnerRecursive((Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, (uint)from.Sum(x => x), new HashSet<HyperEdge>());
     }
     
     /// <inheritdoc cref="HomogenousHypergraphReconstructorBase{T}.RestoreInnerAsync" />
     protected override Task<HomogenousHypergraph?> RestoreInnerAsync(
-        VerticesDegreesVector from,
+        Domain.VerticesDegreesVector from,
         int simplicesDimension,
         CancellationToken cancellationToken = default)
     {
-        return RestoreInnerRecursiveAsync((VerticesDegreesVector)from.Clone(), simplicesDimension, (uint)from.Sum(x => x), new HashSet<HyperEdge>(), cancellationToken);
+        return RestoreInnerRecursiveAsync((Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, (uint)from.Sum(x => x), new HashSet<HyperEdge>(), cancellationToken);
     }
     
     #endregion

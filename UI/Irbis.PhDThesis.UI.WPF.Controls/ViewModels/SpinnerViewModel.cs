@@ -59,7 +59,7 @@ public sealed class SpinnerViewModel:
     /// <summary>
     /// 
     /// </summary>
-    private SpinnerItemViewModel[] _items;
+    private SpinnerItemViewModel[]? _items;
     
     /// <summary>
     /// 
@@ -161,7 +161,7 @@ public sealed class SpinnerViewModel:
     public SpinnerItemViewModel[] Items
     {
         get =>
-            _items;
+            _items!;
 
         private set =>
             SetProperty(ref _items, value);

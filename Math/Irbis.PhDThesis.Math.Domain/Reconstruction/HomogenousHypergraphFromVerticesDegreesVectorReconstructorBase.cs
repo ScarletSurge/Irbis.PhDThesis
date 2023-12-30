@@ -10,7 +10,7 @@ public abstract class HomogenousHypergraphFromVerticesDegreesVectorReconstructor
     HomogenousHypergraphReconstructorBase<VerticesDegreesVector>
 {
     
-    #region PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
+    #region Irbis.PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
 
     /// <summary>
     /// 
@@ -28,7 +28,7 @@ public abstract class HomogenousHypergraphFromVerticesDegreesVectorReconstructor
             .ThrowIfLowerThan(simplicesDimension, 2)
             .ThrowIfGreaterThan(simplicesDimension, from.VerticesCount)
             .ThrowIfAny(from, vertexDegree => vertexDegree > combinationsCount, "Can't restore homogenous hypergraph: one or more vertices degree is too big.")
-            .ThrowIf(from, innerFrom => innerFrom.Sum(vertexDegree => vertexDegree) % simplicesDimension != 0, "Can't restore homogenous hypergraph: sum of vertices degrees vector components must be divisible by simplices dimension.");
+            .ThrowIf(from, innerFrom => innerFrom!.Sum(vertexDegree => vertexDegree) % simplicesDimension != 0, "Can't restore homogenous hypergraph: sum of vertices degrees vector components must be divisible by simplices dimension.");
 
         return this;
     }

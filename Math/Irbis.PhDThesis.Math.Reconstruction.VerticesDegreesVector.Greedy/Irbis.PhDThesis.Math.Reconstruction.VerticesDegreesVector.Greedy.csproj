@@ -4,11 +4,11 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Irbis.PhDThesis.Domain.Extensions\Irbis.PhDThesis.Domain.Extensions.csproj" />
-      <ProjectReference Include="..\Irbis.PhDThesis.Domain.Helpers\Irbis.PhDThesis.Domain.Helpers.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
     </ItemGroup>
 
 </Project>

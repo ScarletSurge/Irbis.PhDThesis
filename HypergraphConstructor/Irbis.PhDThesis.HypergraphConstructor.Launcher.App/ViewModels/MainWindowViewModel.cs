@@ -11,8 +11,8 @@ using Irbis.WPF.MVVM.Core.ViewModels;
 using Irbis.PhDThesis.Domain.Extensions;
 using Irbis.PhDThesis.Math.Domain;
 using Irbis.PhDThesis.Math.Domain.Reconstruction;
-using Irbis.PhDThesis.Math.Reconstruction.Greedy;
-using Irbis.PhDThesis.Math.Reconstruction.Reduction;
+using Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy;
+using Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction;
 
 namespace Irbis.PhDThesis.HypergraphConstructor.Launcher.App.ViewModels;
 

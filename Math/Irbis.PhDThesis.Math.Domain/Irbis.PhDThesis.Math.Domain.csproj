@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Irbis.PhDThesis.Math.Domain</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Domain\Irbis.PhDThesis.Domain.Extensions\Irbis.PhDThesis.Domain.Extensions.csproj" />
+      <ProjectReference Include="..\..\Domain\Irbis.PhDThesis.Domain.Helpers\Irbis.PhDThesis.Domain.Helpers.csproj" />
+    </ItemGroup>
+
+</Project>

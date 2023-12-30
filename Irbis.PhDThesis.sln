@@ -1,36 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Math", "Math", "{D43D824A-9848-476F-9C82-05AA5A586F53}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{98AEDC14-A4B3-4383-ADFB-6A21B75454FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HypergraphConstructor", "HypergraphConstructor", "{BDF7E47E-08BD-4631-AB70-AC8F4ECC3F4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Domain.Extensions", "Domain\Irbis.PhDThesis.Domain.Extensions\Irbis.PhDThesis.Domain.Extensions.csproj", "{937B89B3-2C3C-417B-A445-18833E9BA31C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Domain.Helpers", "Domain\Irbis.PhDThesis.Domain.Helpers\Irbis.PhDThesis.Domain.Helpers.csproj", "{2C681BBA-6ACB-42C3-B702-15A6C7AA4E0E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encryptor", "Encryptor", "{904E791A-ED08-47EB-8286-E98C6EDE4D14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.HypergraphConstructor.Launcher.App", "Irbis.PhDThesis.HypergraphConstructor.Launcher.App\Irbis.PhDThesis.HypergraphConstructor.Launcher.App.csproj", "{A22CA700-0A26-4D28-B89C-194DA3788A9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Encryptor.Launcher.App", "Encryptor\Irbis.PhDThesis.Encryptor.Launcher.App\Irbis.PhDThesis.Encryptor.Launcher.App.csproj", "{59857CB9-5C27-464F-A620-C11E70E2233A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Encryptor.Launcher.App", "Irbis.PhDThesis.Encryptor.Launcher.App\Irbis.PhDThesis.Encryptor.Launcher.App.csproj", "{59857CB9-5C27-464F-A620-C11E70E2233A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HypergraphConstructor", "HypergraphConstructor", "{BDF7E47E-08BD-4631-AB70-AC8F4ECC3F4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Domain", "Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj", "{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.HypergraphConstructor.Launcher.App", "HypergraphConstructor\Irbis.PhDThesis.HypergraphConstructor.Launcher.App\Irbis.PhDThesis.HypergraphConstructor.Launcher.App.csproj", "{A22CA700-0A26-4D28-B89C-194DA3788A9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Domain.Extensions", "Irbis.PhDThesis.Domain.Extensions\Irbis.PhDThesis.Domain.Extensions.csproj", "{937B89B3-2C3C-417B-A445-18833E9BA31C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Math", "Math", "{D43D824A-9848-476F-9C82-05AA5A586F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Test", "Irbis.PhDThesis.Math.Test\Irbis.PhDThesis.Math.Test.csproj", "{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Domain", "Math\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj", "{E6EC0F0C-40FC-43FD-B032-B23FCADED3F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy", "Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy.csproj", "{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.FractionTree.CalkinWilf", "Math\Irbis.PhDThesis.Math.FractionTree.CalkinWilf\Irbis.PhDThesis.Math.FractionTree.CalkinWilf.csproj", "{C93107D8-9938-4CB9-AF97-06793B0C5277}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction", "Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj", "{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.FractionTree.SternBrokot", "Math\Irbis.PhDThesis.Math.FractionTree.SternBrokot\Irbis.PhDThesis.Math.FractionTree.SternBrokot.csproj", "{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{98AEDC14-A4B3-4383-ADFB-6A21B75454FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy", "Math\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy.csproj", "{9B832E70-2673-4E06-A5A0-5E23A1CFCFBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Domain.Helpers", "Irbis.PhDThesis.Domain.Helpers\Irbis.PhDThesis.Domain.Helpers.csproj", "{2C681BBA-6ACB-42C3-B702-15A6C7AA4E0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction", "Math\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj", "{B1DA7965-EBBD-45C2-8C44-6B4B048DA5D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Test", "Math\Irbis.PhDThesis.Math.Test\Irbis.PhDThesis.Math.Test.csproj", "{E5222C77-CDA2-4750-A8C0-A7ECEC65BBD9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{92619AF9-1A3E-4567-A9E4-9F6B22A28189}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.UI.WPF.Controls", "Irbis.PhDThesis.UI.WPF.Controls\Irbis.PhDThesis.UI.WPF.Controls.csproj", "{DEEBBC4C-AD2D-4A1C-95E7-7570551BE753}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.FractionTree.CalkinWilf", "Irbis.PhDThesis.Math.FractionTree.CalkinWilf\Irbis.PhDThesis.Math.FractionTree.CalkinWilf.csproj", "{C93107D8-9938-4CB9-AF97-06793B0C5277}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.FractionTree.SternBrokot", "Irbis.PhDThesis.Math.FractionTree.SternBrokot\Irbis.PhDThesis.Math.FractionTree.SternBrokot.csproj", "{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.UI.WPF.Controls", "UI\Irbis.PhDThesis.UI.WPF.Controls\Irbis.PhDThesis.UI.WPF.Controls.csproj", "{DEEBBC4C-AD2D-4A1C-95E7-7570551BE753}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

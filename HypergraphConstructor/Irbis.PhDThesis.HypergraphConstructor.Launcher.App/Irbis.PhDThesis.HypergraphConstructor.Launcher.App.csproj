@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Math\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
+      <ProjectReference Include="..\..\Math\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy.csproj" />
+      <ProjectReference Include="..\..\Math\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj" />
+      <ProjectReference Include="..\..\UI\Irbis.PhDThesis.UI.WPF.Controls\Irbis.PhDThesis.UI.WPF.Controls.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ViewModels\Design" />
+    </ItemGroup>
+
+</Project>
