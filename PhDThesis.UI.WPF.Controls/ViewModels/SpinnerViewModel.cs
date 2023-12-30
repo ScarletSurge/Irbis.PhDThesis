@@ -50,6 +50,11 @@ public sealed class SpinnerViewModel:
     /// 
     /// </summary>
     private Size _sceneSize;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private SpinnerRotationDirection _rotationDirection;
 
     /// <summary>
     /// 
@@ -118,9 +123,14 @@ public sealed class SpinnerViewModel:
     /// </summary>
     public SpinnerRotationDirection RotationDirection
     {
-        private get;
-        
-        set;
+        private get =>
+            _rotationDirection;
+
+        set
+        {
+            _rotationDirection = value;
+            UpdateItems();
+        }
     }
     
     /// <summary>
