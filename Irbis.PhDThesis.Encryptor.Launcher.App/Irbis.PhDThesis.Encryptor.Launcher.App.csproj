@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.UI.WPF.Controls\Irbis.PhDThesis.UI.WPF.Controls.csproj" />
+    </ItemGroup>
+
+</Project>

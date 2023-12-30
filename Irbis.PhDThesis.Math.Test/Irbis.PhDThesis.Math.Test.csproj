@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.FractionTree.CalkinWilf\Irbis.PhDThesis.Math.FractionTree.CalkinWilf.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.FractionTree.SternBrokot\Irbis.PhDThesis.Math.FractionTree.SternBrokot.csproj" />
+    </ItemGroup>
+
+</Project>
