@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 
+using PhDThesis.Domain.Helpers.Guarding;
+
 namespace PhDThesis.Domain.Extensions;
 
 /// <summary>
@@ -35,11 +37,8 @@ public static class BigIntegerExtensions
     public static BigInteger Factorial(
         this BigInteger value)
     {
-        
-        if (value < BigInteger.Zero)
-        {
-            throw new ArgumentException("value must be GT 0", nameof(value));
-        }
+        Guardant.Instance
+            .ThrowIfLowerThan(value, BigInteger.Zero);
 
         var factorial = BigInteger.One;
 
@@ -61,8 +60,8 @@ public static class BigIntegerExtensions
         BigInteger n,
         BigInteger k)
     {
-        // TODO: speed up
-        // TODO: check args values
+        Guardant.Instance
+            .ThrowIfLowerThan(n, BigInteger.Zero);
 
         if (n == k)
         {
@@ -79,7 +78,13 @@ public static class BigIntegerExtensions
             return BigInteger.Zero;
         }
 
-        return n.Factorial() / k.Factorial() / (n - k).Factorial();
+        var partialResult = BigInteger.One;
+        for (BigInteger i = n - k + 1; i <= n; i++)
+        {
+            partialResult *= i;
+        }
+        
+        return partialResult / k.Factorial();
     }
     
 }

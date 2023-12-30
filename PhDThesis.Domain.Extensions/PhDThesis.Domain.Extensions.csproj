@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PhDThesis.Domain.Helpers\PhDThesis.Domain.Helpers.csproj" />
+    </ItemGroup>
+
 </Project>

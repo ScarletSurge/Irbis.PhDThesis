@@ -1,8 +1,11 @@
 ﻿using System.Numerics;
 
 using PhDThesis.Domain.Helpers.Guarding;
+using PhDThesis.Math.Domain;
+using PhDThesis.Math.Domain.Fraction;
+using PhDThesis.Math.Domain.FractionTree;
 
-namespace PhDThesis.Math.Domain.FractionTree;
+namespace PhDThesis.Math.FractionTree.CalkinWilf;
 
 /// <summary>
 /// 
@@ -12,7 +15,7 @@ public sealed class CalkinWilfTree:
 {
     
     /// <inheritdoc cref="IFractionTree.FindFractionByPath" />
-    public Fraction.Fraction FindFractionByPath(
+    public Fraction FindFractionByPath(
         BitArray path)
     {
         Guardant.Instance
@@ -33,12 +36,12 @@ public sealed class CalkinWilfTree:
             }
         }
 
-        return new Fraction.Fraction(numerator, denominator);
+        return new Fraction(numerator, denominator);
     }
     
     /// <inheritdoc cref="IFractionTree.FindPathByFraction" />
     public BitArray FindPathByFraction(
-        Fraction.Fraction fraction)
+        Fraction fraction)
     {
         Guardant.Instance
             .ThrowIfLowerThan(fraction.Numerator, BigInteger.Zero)

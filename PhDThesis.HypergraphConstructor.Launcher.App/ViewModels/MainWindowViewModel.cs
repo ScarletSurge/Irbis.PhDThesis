@@ -336,7 +336,8 @@ internal sealed class MainWindowViewModel
     /// <inheritdoc cref="IDisposable.Dispose" />
     public void Dispose()
     {
-        _restorationOperationCancellationSource.Cancel();
+        _restorationOperationCancellationSource?.Cancel();
+        _restorationOperationCancellationSource?.Dispose();
         GC.SuppressFinalize(this);
     }
     

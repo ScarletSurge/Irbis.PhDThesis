@@ -1,8 +1,11 @@
 ﻿using System.Numerics;
 
 using PhDThesis.Domain.Helpers.Guarding;
+using PhDThesis.Math.Domain;
+using PhDThesis.Math.Domain.Fraction;
+using PhDThesis.Math.Domain.FractionTree;
 
-namespace PhDThesis.Math.Domain.FractionTree;
+namespace PhDThesis.Math.FractionTree.SternBrokot;
 
 /// <summary>
 /// 
@@ -12,7 +15,7 @@ public sealed class SternBrokotTree:
 {
     
     /// <inheritdoc cref="IFractionTree.FindFractionByPath" />
-    public Fraction.Fraction FindFractionByPath(
+    public Fraction FindFractionByPath(
         BitArray path)
     {
         Guardant.Instance
@@ -42,14 +45,14 @@ public sealed class SternBrokotTree:
             denominator = leftMediantDenominator + rightMediantDenominator;
         }
 
-        return new Fraction.Fraction(numerator, denominator);
+        return new Fraction(numerator, denominator);
     }
     
     /// <inheritdoc cref="IFractionTree.FindPathByFraction" />
     public BitArray FindPathByFraction(
-        Fraction.Fraction fraction)
+        Fraction fraction)
     {
-        var approximation = new Fraction.Fraction(BigInteger.One, BigInteger.One);
+        var approximation = new Fraction(BigInteger.One, BigInteger.One);
         var leftMediantNumerator = BigInteger.Zero;
         var leftMediantDenominator = BigInteger.One;
         var rightMediantNumerator = BigInteger.One;
@@ -69,7 +72,7 @@ public sealed class SternBrokotTree:
                 (leftMediantNumerator, leftMediantDenominator) = approximation;
             }
             
-            approximation = new Fraction.Fraction(leftMediantNumerator + rightMediantNumerator, leftMediantDenominator + rightMediantDenominator);
+            approximation = new Fraction(leftMediantNumerator + rightMediantNumerator, leftMediantDenominator + rightMediantDenominator);
         }
 
         return new BitArray(path);

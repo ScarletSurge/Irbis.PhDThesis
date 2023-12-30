@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 using PhDThesis.Domain.Helpers.Guarding;
 
@@ -191,7 +190,7 @@ public sealed class VerticesDegreesVector:
             return false;
         }
 
-        return _verticesDegrees.Equals(other);
+        return _verticesDegrees.SequenceEqual(other._verticesDegrees);
     }
 
     #endregion

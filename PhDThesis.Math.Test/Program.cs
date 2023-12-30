@@ -1,8 +1,11 @@
 ﻿using System.Numerics;
+
 using PhDThesis.Domain.Extensions;
 using PhDThesis.Math.Domain;
 using PhDThesis.Math.Domain.Fraction;
 using PhDThesis.Math.Domain.FractionTree;
+using PhDThesis.Math.FractionTree.CalkinWilf;
+using PhDThesis.Math.FractionTree.SternBrokot;
 
 void TestHypergraphConstruction()
 {

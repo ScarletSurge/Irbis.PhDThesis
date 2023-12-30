@@ -183,6 +183,7 @@
             </controls:Spinner>
             <localControls:HomogenousHypergraphCanvas Grid.Row="3"
                                                       Grid.Column="0"
+                                                      Margin="5"
                                                       HomogenousHypergraphToShow="{Binding ConstructedHypergraph, Mode=OneWay}">
                 <localControls:HomogenousHypergraphCanvas.Visibility>
                     <MultiBinding Converter="{converters:FromBoolConverter}">

@@ -91,19 +91,11 @@ public partial class HomogenousHypergraphCanvas:
         var targetCanvasCenterPoint = new Point(targetCanvasWidth / 2, targetCanvasHeight / 2);
 
         var vertices = new (Ellipse, Point)[_currentHypergraphModel.VerticesCount];
-        var halfSide = (int)(0.375 * System.Math.Min(targetCanvasWidth, targetCanvasHeight));
-        var startPoint = targetCanvasCenterPoint with { X = targetCanvasCenterPoint.X + halfSide };
-        var fullWay = halfSide * 8;
-        var fullWayPartLength = fullWay / _currentHypergraphModel.VerticesCount;
-        
-        var radius = (int)(0.375 * System.Math.Min(targetCanvasWidth, targetCanvasHeight));
+
+        var rectanglePerimeter = (targetCanvas.RenderSize.Height + targetCanvas.RenderSize.Width) * 2;
         for (var i = 0; i < _currentHypergraphModel.VerticesCount; i++)
         {
-            var vertexPoint = targetCanvasCenterPoint with { X = targetCanvasCenterPoint.X + radius };
-            var angle = 360f / _currentHypergraphModel.VerticesCount * i;
-            var rotateMatrix = new Matrix();
-            rotateMatrix.RotateAt(angle, targetCanvasCenterPoint.X, targetCanvasCenterPoint.Y);
-            var targetVertexPoint = rotateMatrix.Transform(vertexPoint);
+            var targetVertexPoint = CalculateRectanglePoint(targetCanvasCenterPoint, targetCanvasHeight, targetCanvasWidth, rectanglePerimeter * i / _currentHypergraphModel.VerticesCount);
             
             Ellipse vertexView;
             targetCanvas.Children.Add(vertexView = new Ellipse
@@ -157,6 +149,38 @@ public partial class HomogenousHypergraphCanvas:
             Canvas.SetTop(simplexCenterView, simplexCenterPoint.Y - SimplexCenterRadius);
             Panel.SetZIndex(simplexCenterView, SimplexCenterZIndex);
         }
+    }
+
+    private Point CalculateRectanglePoint(
+        Point circleCenterPoint,
+        double rectangleHeight,
+        double rectangleWidth,
+        double rectanglePerimeterPart)
+    {
+        double x, y;
+        
+        if (rectanglePerimeterPart <= rectangleWidth)
+        {
+            x = circleCenterPoint.X - rectangleWidth / 2 + rectanglePerimeterPart;
+            y = circleCenterPoint.Y - rectangleHeight / 2;
+        }
+        else if (rectanglePerimeterPart <= rectangleWidth + rectangleHeight)
+        {
+            x = circleCenterPoint.X + rectangleWidth / 2;
+            y = circleCenterPoint.Y - rectangleHeight / 2 + (rectanglePerimeterPart - rectangleWidth);
+        }
+        else if (rectanglePerimeterPart <= 2 * rectangleWidth + rectangleHeight)
+        {
+            x = circleCenterPoint.X + rectangleWidth / 2 - (rectanglePerimeterPart - (rectangleWidth + rectangleHeight));
+            y = circleCenterPoint.Y + rectangleHeight / 2;
+        }
+        else
+        {
+            x = circleCenterPoint.X - rectangleWidth / 2;
+            y = circleCenterPoint.Y + rectangleHeight / 2 - (rectanglePerimeterPart - (2 * rectangleWidth + rectangleHeight));
+        }
+
+        return new Point(x, y);
     }
     
 }
