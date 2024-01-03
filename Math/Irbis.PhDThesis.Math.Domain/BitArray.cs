@@ -43,6 +43,10 @@ public sealed class BitArray:
         }
 
         _bits = new byte[bitsCount >> 3];
+        if (_bits.Length != 0 && _lastByteAffectedBits == 0)
+        {
+            _lastByteAffectedBits = 8;
+        }
     }
     
     /// <summary>
@@ -53,7 +57,7 @@ public sealed class BitArray:
         IEnumerable<bool> bits)
     {
         Guardant.Instance
-            .ThrowIfNullOrEmpty(bits);
+            .ThrowIfNull(bits);
 
         var packedBitsList = new List<byte>();
         var packedBits = default(byte);
@@ -91,8 +95,10 @@ public sealed class BitArray:
     /// <summary>
     /// 
     /// </summary>
-    public int Size =>
-        _bits.Length + _lastByteAffectedBits;
+    public int BitsCount =>
+        _bits.Length == 0
+            ? 0
+            : ((_bits.Length - 1) << 3) + _lastByteAffectedBits;
 
     /// <summary>
     /// 

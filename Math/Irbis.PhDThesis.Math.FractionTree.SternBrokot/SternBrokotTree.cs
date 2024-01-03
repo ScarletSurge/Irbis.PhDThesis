@@ -52,27 +52,29 @@ public sealed class SternBrokotTree:
     public BitArray FindPathByFraction(
         Fraction fraction)
     {
-        var approximation = new Fraction(BigInteger.One, BigInteger.One);
-        var leftMediantNumerator = BigInteger.Zero;
-        var leftMediantDenominator = BigInteger.One;
-        var rightMediantNumerator = BigInteger.One;
-        var rightMediantDenominator = BigInteger.Zero;
+        var (approximationNumerator, approximationDenominator) = (BigInteger.One, BigInteger.One);
+        var (leftMediantNumerator, leftMediantDenominator) = (BigInteger.Zero, BigInteger.One);
+        var (rightMediantNumerator, rightMediantDenominator) = (BigInteger.One, BigInteger.Zero);
         var path = new List<bool>();
 
-        while (approximation != fraction)
+        var fractionsComparisonResult = (approximationNumerator * fraction.Denominator).CompareTo(approximationDenominator * fraction.Numerator);
+        while (fractionsComparisonResult != 0)
         {
-            if (approximation > fraction)
+            if (fractionsComparisonResult > 0)
             {
                 path.Add(false);
-                (rightMediantNumerator, rightMediantDenominator) = approximation;
+                (rightMediantNumerator, rightMediantDenominator) = (approximationNumerator, approximationDenominator);
             }
             else
             {
                 path.Add(true);
-                (leftMediantNumerator, leftMediantDenominator) = approximation;
+                (leftMediantNumerator, leftMediantDenominator) = (approximationNumerator, approximationDenominator);
             }
+
+            approximationNumerator = leftMediantNumerator + rightMediantNumerator;
+            approximationDenominator = leftMediantDenominator + rightMediantDenominator;
             
-            approximation = new Fraction(leftMediantNumerator + rightMediantNumerator, leftMediantDenominator + rightMediantDenominator);
+            fractionsComparisonResult = (approximationNumerator * fraction.Denominator).CompareTo(approximationDenominator * fraction.Numerator);
         }
 
         return new BitArray(path);

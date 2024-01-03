@@ -55,16 +55,18 @@ public sealed class CalkinWilfTree:
         {
             if (numerator > denominator)
             {
-                path.Insert(0, true);
+                path.Add(true);
                 numerator -= denominator;
             }
             else
             {
-                path.Insert(0, false);
+                path.Add(false);
                 denominator -= numerator;
             }
         }
 
+        path.Reverse();
+        
         return new BitArray(path);
     }
     

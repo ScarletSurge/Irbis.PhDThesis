@@ -18,18 +18,14 @@ public static class FractionExtensions
     public static IEnumerable<BigInteger> ToContinuedFraction(
         this Fraction fraction)
     {
-        yield return fraction.Numerator / fraction.Denominator;
-
-        var nextDenominator = fraction.Numerator % fraction.Denominator;
-        if (nextDenominator.IsZero)
+        var numerator = fraction.Numerator;
+        var denominator = fraction.Denominator;
+        
+        do
         {
-            yield break;
-        }
-
-        foreach (var component in ToContinuedFraction(new Fraction(fraction.Denominator, nextDenominator)))
-        {
-            yield return component;
-        }
+            yield return numerator / denominator;
+            (numerator, denominator) = (denominator, numerator % denominator);
+        } while (!denominator.IsZero);
     }
     
     /// <summary>
