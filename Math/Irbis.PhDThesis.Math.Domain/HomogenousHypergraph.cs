@@ -48,7 +48,7 @@ public sealed class HomogenousHypergraph:
     public HomogenousHypergraph(
         int verticesCount,
         int simplicesDimension,
-        params HyperEdge[]? simplicesVertices)
+        IEnumerable<HyperEdge>? simplicesVertices)
     {
         Guardant.Instance
             .ThrowIfGreaterThan(simplicesDimension, verticesCount);
@@ -274,7 +274,7 @@ public sealed class HomogenousHypergraph:
 
     #endregion
     
-    #region System.Collections.IEnumerator implementation
+    #region System.Collections.IEnumerable implementation
     
     /// <inheritdoc cref="IEnumerable.GetEnumerator" />
     IEnumerator IEnumerable.GetEnumerator()

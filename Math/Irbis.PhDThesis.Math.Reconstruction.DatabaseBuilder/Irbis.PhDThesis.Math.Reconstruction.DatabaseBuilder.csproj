@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Greedy.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction\Irbis.PhDThesis.Math.Reconstruction.VerticesDegreesVector.Reduction.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{92619AF9-1A3E-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.UI.WPF.Controls", "UI\Irbis.PhDThesis.UI.WPF.Controls\Irbis.PhDThesis.UI.WPF.Controls.csproj", "{DEEBBC4C-AD2D-4A1C-95E7-7570551BE753}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder", "Math\Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder\Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder.csproj", "{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,7 @@ Global
 		{DEEBBC4C-AD2D-4A1C-95E7-7570551BE753} = {92619AF9-1A3E-4567-A9E4-9F6B22A28189}
 		{C93107D8-9938-4CB9-AF97-06793B0C5277} = {D43D824A-9848-476F-9C82-05AA5A586F53}
 		{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35} = {D43D824A-9848-476F-9C82-05AA5A586F53}
+		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F} = {D43D824A-9848-476F-9C82-05AA5A586F53}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -95,5 +98,9 @@ Global
 		{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -34,14 +34,14 @@ void TestBitsCountInBitArray(
     }
 }
 
-void TestHypergraphConstruction()
+void TestHomogenousHypergraphConstruction()
 {
-    var hg1 = new HomogenousHypergraph(3, 2, new HyperEdge(0, 1), new (0, 2), new(1, 2));
+    var hg1 = new HomogenousHypergraph(3, 2, new HyperEdge[] { new (0, 1), new (0, 2), new(1, 2) });
 }
 
-void TestHypergraphIteration()
+void TestHomogenousHypergraphIteration()
 {
-    var hg = new HomogenousHypergraph(3, 2, new HyperEdge(0, 1), new (0, 2), new(1, 2));
+    var hg = new HomogenousHypergraph(3, 2, new HyperEdge[] { new (0, 1), new (0, 2), new(1, 2) });
     
     for (var i = 0; i < BigIntegerExtensions.CombinationsCount(hg.VerticesCount, hg.SimplicesDimension); i++)
     {
@@ -49,9 +49,9 @@ void TestHypergraphIteration()
     }
 }
 
-void TestHypergraphEtc()
+void TestHomogenousHypergraphEtc()
 {
-    var hg = new HomogenousHypergraph(11, 7, new HyperEdge(10, 9, 8, 7, 6, 5, 4), new HyperEdge(1, 2, 3, 4, 5, 6, 7));
+    var hg = new HomogenousHypergraph(11, 7, new HyperEdge[] { new (10, 9, 8, 7, 6, 5, 4), new (1, 2, 3, 4, 5, 6, 7) });
 
     foreach (var simplex in hg)
     {
@@ -152,15 +152,19 @@ void TestDavid(
     var cwTree = new CalkinWilfTree();
     var sbTree = new SternBrokotTree();
     var continuedFraction = Enumerable
-        .Repeat(0, random.Next(10, 150))
-        .Select(x => (BigInteger)random.Next(0, 1000))
+        .Repeat(0, random.Next(10, 51))
+        .Select(x => (BigInteger)random.Next(1, 129))
         .ToArray();
+    Array.Sort(continuedFraction);
+    continuedFraction = continuedFraction.Reverse().ToArray();
     var fraction = continuedFraction.ToFraction();
     Console.Write(fraction);
     Console.WriteLine($", total bits for numerator and denominator as numbers == {GetFractionBitsCount(fraction)}");
 
-    Console.WriteLine($"Calkin-Wilf representation length = {cwTree.FindPathByFraction(fraction).BitsCount}");
-    Console.WriteLine($"Stern-Brokot representation length = {sbTree.FindPathByFraction(fraction).BitsCount}");
+    var cwTreePath = cwTree.FindPathByFraction(fraction);
+    var sbTreePath = sbTree.FindPathByFraction(fraction);
+    Console.WriteLine($"Calkin-Wilf representation length = {cwTreePath.BitsCount}");
+    Console.WriteLine($"Stern-Brokot representation length = {sbTreePath.BitsCount}");
 }
 
 void TestWhoIsShorter(
@@ -187,7 +191,7 @@ void TestWhoIsShorter(
         var sbTreeFraction = sbTree.FindFractionByPath(targetPath);
         var fractionBitsCount = GetFractionBitsCount(sbTreeFraction);
         var comparisonResult = fractionBitsCount.CompareTo(targetPath.BitsCount);
-        Console.Write($"[{i:00000}][Stern-Brokot] path length = {targetPath.BitsCount:00000}, fraction length = {fractionBitsCount:00000}  => ");
+        Console.Write($"[{i:00000}][Stern-Brokot] path length = {targetPath.BitsCount:00000}, fraction length = {fractionBitsCount:00000} => ");
         Console.Write(comparisonResult switch
         {
             0 => "Equal",
@@ -199,7 +203,7 @@ void TestWhoIsShorter(
         var cwTreeFraction = cwTree.FindFractionByPath(targetPath);
         fractionBitsCount = GetFractionBitsCount(cwTreeFraction);
         comparisonResult = fractionBitsCount.CompareTo(targetPath.BitsCount);
-        Console.Write($"[{i:00000}][Calkin-Wilf]  path length = {targetPath.BitsCount:00000}, fraction length = {fractionBitsCount:00000}  => ");
+        Console.Write($"[{i:00000}][Calkin-Wilf] path length = {targetPath.BitsCount:00000}, fraction length = {fractionBitsCount:00000} => ");
         Console.Write(comparisonResult switch
         {
             0 => "Equal",
@@ -210,11 +214,11 @@ void TestWhoIsShorter(
     }
 }
 
-// TestBitsCountInBitArray();
-// TestHypergraphConstruction();
-// TestHypergraphIteration();
-// TestHypergraphEtc();
-// TestContinuedFraction(new Fraction(44435, 10587));
+TestBitsCountInBitArray();
+TestHomogenousHypergraphConstruction();
+TestHomogenousHypergraphIteration();
+TestHomogenousHypergraphEtc();
+TestContinuedFraction(new Fraction(44435, 10587));
 TestFractionTrees();
-// TestDavid();
-// TestWhoIsShorter();
+TestDavid();
+TestWhoIsShorter();

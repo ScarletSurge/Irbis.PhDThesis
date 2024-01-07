@@ -26,14 +26,9 @@ public sealed class CalkinWilfTree:
 
         foreach (var pathPart in path)
         {
-            if (pathPart)
-            {
-                numerator += denominator;
-            }
-            else
-            {
-                denominator += numerator;
-            }
+            _ = pathPart
+                ? numerator += denominator
+                : denominator += numerator;
         }
 
         return new Fraction(numerator, denominator);
@@ -53,16 +48,10 @@ public sealed class CalkinWilfTree:
 
         while (numerator != denominator)
         {
-            if (numerator > denominator)
-            {
-                path.Add(true);
-                numerator -= denominator;
-            }
-            else
-            {
-                path.Add(false);
-                denominator -= numerator;
-            }
+            path.Add(numerator > denominator);
+            _ = path[^1]
+                ? numerator -= denominator
+                : denominator -= numerator;
         }
 
         path.Reverse();

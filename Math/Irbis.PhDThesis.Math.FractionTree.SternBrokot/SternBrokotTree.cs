@@ -30,16 +30,9 @@ public sealed class SternBrokotTree:
         
         foreach (var pathPart in path)
         {
-            if (pathPart)
-            {
-                leftMediantNumerator = numerator;
-                leftMediantDenominator = denominator;
-            }
-            else
-            {
-                rightMediantNumerator = numerator;
-                rightMediantDenominator = denominator;
-            }
+            _ = pathPart
+                ? (leftMediantNumerator, leftMediantDenominator) = (numerator, denominator)
+                : (rightMediantNumerator, rightMediantDenominator) = (numerator, denominator);
 
             numerator = leftMediantNumerator + rightMediantNumerator;
             denominator = leftMediantDenominator + rightMediantDenominator;
@@ -60,16 +53,10 @@ public sealed class SternBrokotTree:
         var fractionsComparisonResult = (approximationNumerator * fraction.Denominator).CompareTo(approximationDenominator * fraction.Numerator);
         while (fractionsComparisonResult != 0)
         {
-            if (fractionsComparisonResult > 0)
-            {
-                path.Add(false);
-                (rightMediantNumerator, rightMediantDenominator) = (approximationNumerator, approximationDenominator);
-            }
-            else
-            {
-                path.Add(true);
-                (leftMediantNumerator, leftMediantDenominator) = (approximationNumerator, approximationDenominator);
-            }
+            path.Add(fractionsComparisonResult < 0);
+            _ = path[^1]
+                ? (leftMediantNumerator, leftMediantDenominator) = (approximationNumerator, approximationDenominator)
+                : (rightMediantNumerator, rightMediantDenominator) = (approximationNumerator, approximationDenominator);
 
             approximationNumerator = leftMediantNumerator + rightMediantNumerator;
             approximationDenominator = leftMediantDenominator + rightMediantDenominator;
