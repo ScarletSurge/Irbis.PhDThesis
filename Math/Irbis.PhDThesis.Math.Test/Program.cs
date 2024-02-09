@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-
+using System.Text;
 using Irbis.PhDThesis.Domain.Extensions;
 using Irbis.PhDThesis.Math.Domain;
 using Irbis.PhDThesis.Math.Domain.Fraction;
@@ -10,8 +10,8 @@ using Irbis.PhDThesis.Math.FractionTree.SternBrokot;
 int GetFractionBitsCount(
     Fraction fraction)
 {
-    var bitsForNumerator = Math.Ceiling(BigInteger.Log(fraction.Numerator, 2));
-    var bitsForDenominator = Math.Ceiling(BigInteger.Log(fraction.Denominator, 2));
+    var bitsForNumerator = Math.Ceiling(BigInteger.Log(fraction.Numerator + 1, 2));
+    var bitsForDenominator = Math.Ceiling(BigInteger.Log(fraction.Denominator + 1, 2));
 
     return (int)(bitsForNumerator + bitsForDenominator);
 }
@@ -151,13 +151,14 @@ void TestDavid(
     
     var cwTree = new CalkinWilfTree();
     var sbTree = new SternBrokotTree();
-    var continuedFraction = Enumerable
-        .Repeat(0, random.Next(10, 51))
-        .Select(x => (BigInteger)random.Next(1, 129))
-        .ToArray();
-    Array.Sort(continuedFraction);
-    continuedFraction = continuedFraction.Reverse().ToArray();
-    var fraction = continuedFraction.ToFraction();
+    //var continuedFraction = Enumerable
+    //    .Repeat(0, random.Next(10, 51))
+    //    .Select(x => (BigInteger)random.Next(1, 129))
+    //    .ToArray();
+    //Array.Sort(continuedFraction);
+    //continuedFraction = continuedFraction.Reverse().ToArray();
+    //var fraction = continuedFraction.ToFraction();
+    var fraction = new Fraction(3, 4);
     Console.Write(fraction);
     Console.WriteLine($", total bits for numerator and denominator as numbers == {GetFractionBitsCount(fraction)}");
 
@@ -214,11 +215,38 @@ void TestWhoIsShorter(
     }
 }
 
-TestBitsCountInBitArray();
-TestHomogenousHypergraphConstruction();
-TestHomogenousHypergraphIteration();
-TestHomogenousHypergraphEtc();
-TestContinuedFraction(new Fraction(44435, 10587));
-TestFractionTrees();
-TestDavid();
-TestWhoIsShorter();
+void TestSternBrokotTreePaths()
+{
+    IFractionTree tree = new SternBrokotTree();
+    var builder = new StringBuilder();
+
+    for (var i = 1; i <= 11; i++)
+    {
+        for (var j = (int)BigInteger.Pow(2, i - 1) - 1; j >= 0; j--)
+        {
+            var str = Convert.ToString(j, 2);
+            builder
+                .Append(new string(Enumerable.Repeat('0', i - (str.Length > i ? i : str.Length)).ToArray()))
+                .Append(str);
+            var bitArray = new BitArray(builder.ToString().Select(x => int.Parse(x.ToString()) == 0));
+            builder.Clear();
+            var fraction = tree.FindFractionByPath(bitArray);
+            var difference = fraction.Numerator - fraction.Denominator;
+
+            Console.Write($"{fraction} ");
+        }
+    
+        Console.WriteLine();
+    }
+}
+
+// TestBitsCountInBitArray();
+// TestHomogenousHypergraphConstruction();
+// TestHomogenousHypergraphIteration();
+// TestHomogenousHypergraphEtc();
+// TestContinuedFraction(new Fraction(44435, 10587));
+// TestFractionTrees();
+// TestDavid();
+// TestWhoIsShorter();
+
+TestSternBrokotTreePaths();
