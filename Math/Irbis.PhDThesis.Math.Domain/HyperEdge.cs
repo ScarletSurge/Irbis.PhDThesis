@@ -9,7 +9,7 @@ namespace Irbis.PhDThesis.Math.Domain;
 /// </summary>
 public sealed class HyperEdge:
     IEquatable<HyperEdge>,
-    IEnumerable<uint>
+    IEnumerable<int>
 {
     
     #region Fields
@@ -17,7 +17,7 @@ public sealed class HyperEdge:
     /// <summary>
     /// 
     /// </summary>
-    private readonly SortedSet<uint> _vertices;
+    internal readonly SortedSet<int> _vertices;
     
     #endregion
     
@@ -28,12 +28,12 @@ public sealed class HyperEdge:
     /// </summary>
     /// <param name="values"></param>
     public HyperEdge(
-        params uint[] values)
+        params int[] values)
     {
         Guardant.Instance
             .ThrowIfNullOrEmpty(values);
 
-        _vertices = new SortedSet<uint>(values);
+        _vertices = new SortedSet<int>(values);
     }
     
     /// <summary>
@@ -41,12 +41,12 @@ public sealed class HyperEdge:
     /// </summary>
     /// <param name="values"></param>
     public HyperEdge(
-        IEnumerable<uint> values)
+        IEnumerable<int> values)
     {
         Guardant.Instance
             .ThrowIfNullOrEmpty(values);
         
-        _vertices = new SortedSet<uint>(values);
+        _vertices = new SortedSet<int>(values);
     }
     
     #endregion
@@ -129,7 +129,7 @@ public sealed class HyperEdge:
     #region System.Collections.Generic.IEnumerable<out T> implementation
     
     /// <inheritdoc cref="IEnumerable{T}.GetEnumerator" />
-    public IEnumerator<uint> GetEnumerator()
+    public IEnumerator<int> GetEnumerator()
     {
         return _vertices.GetEnumerator();
     }

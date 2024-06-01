@@ -48,7 +48,7 @@ public sealed class HomogenousHypergraph:
     public HomogenousHypergraph(
         int verticesCount,
         int simplicesDimension,
-        IEnumerable<HyperEdge>? simplicesVertices)
+        params HyperEdge[]? simplicesVertices)
     {
         Guardant.Instance
             .ThrowIfGreaterThan(simplicesDimension, verticesCount);
@@ -58,7 +58,7 @@ public sealed class HomogenousHypergraph:
         var simplicesMaxCount = _simplicesMaxCount = BigIntegerExtensions.CombinationsCount(
             VerticesCount, SimplicesDimension);
 
-        _simplices = new BitArray((uint)simplicesMaxCount);
+        _simplices = new BitArray((int)simplicesMaxCount);
         
         foreach (var simplexVertex in simplicesVertices ?? Enumerable.Empty<HyperEdge>())
         {
@@ -94,6 +94,31 @@ public sealed class HomogenousHypergraph:
             
             _simplices[SimplexToBitIndex(hyperEdge)] = value;
         }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="simplexBitIndex"></param>
+    public bool this[
+        int simplexBitIndex]
+    {
+        get
+        {
+            Guardant.Instance
+                .ThrowIfLowerThanOrEqualTo(simplexBitIndex, 0);
+
+            return _simplices[simplexBitIndex];
+        }
+
+        set
+        {
+            Guardant.Instance
+                .ThrowIfLowerThanOrEqualTo(simplexBitIndex, 0);
+
+            _simplices[simplexBitIndex] = value;
+        }
+            
     }
     
     /// <summary>
@@ -171,6 +196,161 @@ public sealed class HomogenousHypergraph:
 
         return _simplices[simplexBitIndex];
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public VerticesDegreesVector ToVerticesDegreesVector()
+    {
+        var verticesDegreesVector = new int[VerticesCount];
+
+        for (var simplexBitIndex = 0; simplexBitIndex < _simplices.BitsCount; ++simplexBitIndex)
+        {
+            if (!ContainsSimplex(simplexBitIndex))
+            {
+                continue;
+            }
+
+            var containedSimplex = BitIndexToSimplex(simplexBitIndex);
+            foreach (var vertexIndex in containedSimplex)
+            {
+                ++verticesDegreesVector[vertexIndex];
+            }
+        }
+
+        return new VerticesDegreesVector(verticesDegreesVector);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vertexIndex"></param>
+    /// <returns></returns>
+    public IEnumerable<int> GetSimplicesIncidentToVertexIndices(
+        int vertexIndex)
+    {
+        IEnumerable<HyperEdge> GenerateSimplices(
+            int lastAddedVertexIndex,
+            HyperEdge toFill)
+        {
+            if (toFill.VerticesCount == _simplicesDimension)
+            {
+                yield return toFill;
+            }
+            else
+            {
+                for (var i = lastAddedVertexIndex + 1; i < VerticesCount; ++i)
+                {
+                    if (toFill._vertices.Add(i))
+                    {
+                        foreach (var generatedSimplex in GenerateSimplices(i, toFill))
+                        {
+                            yield return generatedSimplex;
+                        }
+
+                        toFill._vertices.Remove(i);
+                    }
+                }
+            }
+        }
+
+        Guardant.Instance
+            .ThrowIfLowerThan(vertexIndex, 0)
+            .ThrowIfGreaterThanOrEqualTo(vertexIndex, _verticesCount);
+
+        var simplex = new HyperEdge(vertexIndex);
+
+        foreach (var candidateSimplex in GenerateSimplices(-1, simplex))
+        {
+            var simplexIndex = SimplexToBitIndex(candidateSimplex);
+            if (ContainsSimplex(simplexIndex))
+            {
+                yield return simplexIndex;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vertexIndex"></param>
+    /// <returns></returns>
+    public IEnumerable<HyperEdge> GetSimplicesIncidentToVertex(
+        int vertexIndex)
+    {
+        return GetSimplicesIncidentToVertexIndices(vertexIndex)
+            .Select(BitIndexToSimplex);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vertexIndex"></param>
+    /// <returns></returns>
+    public IEnumerable<int> GetIncidentVerticesIndicesFor(
+        int vertexIndex)
+    {
+        var result = new HashSet<int>();
+
+        foreach (var simplex in GetSimplicesIncidentToVertex(vertexIndex))
+        {
+            foreach (var incidentVertexIndex in simplex)
+            {
+                if (incidentVertexIndex != vertexIndex)
+                {
+                    if (result.Add(incidentVertexIndex))
+                    {
+                        yield return incidentVertexIndex;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckDijkstraConnectivity()
+    {
+        bool CheckDijkstraConnectivityInner(
+            int lastAddedVertexIndex,
+            HashSet<int> verticesIndicesSet)
+        {
+            var notVisitedVerticesIndices = new Lazy<List<int>>(() => new List<int>(VerticesCount));
+            foreach (var incidentVertexForLastAdded in GetIncidentVerticesIndicesFor(lastAddedVertexIndex))
+            {
+                if (verticesIndicesSet.Add(incidentVertexForLastAdded))
+                {
+                    if (verticesIndicesSet.Count == VerticesCount)
+                    {
+                        return true;
+                    }
+                    
+                    notVisitedVerticesIndices.Value.Add(incidentVertexForLastAdded);
+                }
+            }
+
+            if (!notVisitedVerticesIndices.IsValueCreated)
+            {
+                return false;
+            }
+            
+            foreach (var notVisitedVertexIndex in notVisitedVerticesIndices.Value)
+            {
+                if (CheckDijkstraConnectivityInner(notVisitedVertexIndex, verticesIndicesSet))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        var verticesIndicesSet = new HashSet<int> { 0 };
+        return CheckDijkstraConnectivityInner(0, verticesIndicesSet);
+    }
     
     #endregion
     
@@ -239,13 +419,13 @@ public sealed class HomogenousHypergraph:
             .ThrowIfLowerThan(simplexBitIndex, 0)
             .ThrowIfGreaterThanOrEqualTo(simplexBitIndex, simplicesMaxCount);
         
-        var result = new uint[simplicesDimension];
+        var result = new int[simplicesDimension];
         var r = (BigInteger)simplexBitIndex;
-        var j = 0u;
+        var j = 0;
         
         for (var i = 0; i < simplicesDimension; i++)
         {
-            uint cs = j + 1;
+            var cs = j + 1;
             BigInteger cc;
             
             while (r - (cc = BigIntegerExtensions.CombinationsCount(verticesCount - cs, simplicesDimension - i - 1)) >= 0)

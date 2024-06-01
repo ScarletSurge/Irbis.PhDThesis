@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.Encryption\Irbis.PhDThesis.Math.Encryption.csproj" />
       <ProjectReference Include="..\Irbis.PhDThesis.Math.FractionTree.CalkinWilf\Irbis.PhDThesis.Math.FractionTree.CalkinWilf.csproj" />
       <ProjectReference Include="..\Irbis.PhDThesis.Math.FractionTree.SternBrokot\Irbis.PhDThesis.Math.FractionTree.SternBrokot.csproj" />
     </ItemGroup>

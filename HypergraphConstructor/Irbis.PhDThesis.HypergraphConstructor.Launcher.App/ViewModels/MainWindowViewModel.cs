@@ -282,7 +282,7 @@ internal sealed class MainWindowViewModel
             return;
         }
 
-        var verticesDegreesVector = new uint[verticesDegreesStrings.Length];
+        var verticesDegreesVector = new int[verticesDegreesStrings.Length];
 
         var parsed = true;
         verticesDegreesStrings.ForEach((vertexDegreeString, index) =>
@@ -292,7 +292,7 @@ internal sealed class MainWindowViewModel
                 return;
             }
             
-            if (!uint.TryParse(vertexDegreeString, out verticesDegreesVector[index]))
+            if (!int.TryParse(vertexDegreeString, out verticesDegreesVector[index]) || verticesDegreesVector[index] < 0)
             {
                 parsed = false;
             }

@@ -52,7 +52,7 @@ public readonly struct Fraction:
     
     #endregion
     
-    #region methods
+    #region Methods
 
     /// <summary>
     /// 

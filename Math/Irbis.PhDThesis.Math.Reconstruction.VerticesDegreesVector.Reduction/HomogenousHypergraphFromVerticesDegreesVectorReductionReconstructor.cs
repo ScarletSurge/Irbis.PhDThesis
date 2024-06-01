@@ -21,7 +21,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRecons
         
         if (verticesDegreesSum == 0)
         {
-            return new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplices);
+            return new HomogenousHypergraph(from.VerticesCount, simplicesDimension, addedSimplices.ToArray());
         }
 
         var lastAddedSimplex = addedSimplices.LastOrDefault();

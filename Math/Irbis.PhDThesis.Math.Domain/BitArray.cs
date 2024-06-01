@@ -32,14 +32,14 @@ public sealed class BitArray:
     /// </summary>
     /// <param name="bitsCount"></param>
     public BitArray(
-        uint bitsCount)
+        int bitsCount)
     {
         Guardant.Instance
-            .ThrowIfLowerThan(bitsCount, 0U);
+            .ThrowIfLowerThan(bitsCount, 0);
 
         if ((_lastByteAffectedBits = (byte)(bitsCount & 7)) != 0)
         {
-            bitsCount += 8U - _lastByteAffectedBits;
+            bitsCount += 8 - _lastByteAffectedBits;
         }
 
         _bits = new byte[bitsCount >> 3];

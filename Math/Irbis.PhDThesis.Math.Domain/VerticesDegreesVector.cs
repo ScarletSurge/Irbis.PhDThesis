@@ -9,7 +9,7 @@ namespace Irbis.PhDThesis.Math.Domain;
 /// </summary>
 public sealed class VerticesDegreesVector:
     IEquatable<VerticesDegreesVector>,
-    IEnumerable<uint>,
+    IEnumerable<int>,
     ICloneable
 {
     
@@ -18,7 +18,7 @@ public sealed class VerticesDegreesVector:
     /// <summary>
     /// 
     /// </summary>
-    private readonly uint[] _verticesDegrees;
+    private readonly int[] _verticesDegrees;
     
     #endregion
     
@@ -29,7 +29,7 @@ public sealed class VerticesDegreesVector:
     /// </summary>
     /// <param name="verticesDegrees"></param>
     public VerticesDegreesVector(
-        params uint[]? verticesDegrees)
+        params int[]? verticesDegrees)
     {
         if (verticesDegrees is null)
         {
@@ -52,8 +52,8 @@ public sealed class VerticesDegreesVector:
     /// 
     /// </summary>
     /// <param name="vertexId"></param>
-    public uint this[
-        uint vertexId]
+    public int this[
+        int vertexId]
     {
         get =>
             _verticesDegrees[vertexId];
@@ -85,7 +85,7 @@ public sealed class VerticesDegreesVector:
         foreach (var vertex in hyperEdge)
         {
             Guardant.Instance
-                .ThrowIfGreaterThanOrEqualTo(vertex, (uint)_verticesDegrees.Length);
+                .ThrowIfGreaterThanOrEqualTo(vertex, _verticesDegrees.Length);
         }
 
         foreach (var vertex in hyperEdge)
@@ -127,8 +127,8 @@ public sealed class VerticesDegreesVector:
         foreach (var vertexIndex in hyperEdge)
         {
             Guardant.Instance
-                .ThrowIfGreaterThanOrEqualTo(vertexIndex, (uint)_verticesDegrees.Length)
-                .ThrowIfEqual(_verticesDegrees[vertexIndex], 0u);
+                .ThrowIfGreaterThanOrEqualTo(vertexIndex, _verticesDegrees.Length)
+                .ThrowIfEqual(_verticesDegrees[vertexIndex], 0);
         }
 
         foreach (var vertex in hyperEdge)
@@ -208,9 +208,9 @@ public sealed class VerticesDegreesVector:
     #region System.Collections.Generic.IEnumerable<out T> implementation
     
     /// <inheritdoc cref="IEnumerable{T}.GetEnumerator" />
-    public IEnumerator<uint> GetEnumerator()
+    public IEnumerator<int> GetEnumerator()
     {
-        return ((IEnumerable<uint>)_verticesDegrees).GetEnumerator();
+        return ((IEnumerable<int>)_verticesDegrees).GetEnumerator();
     }
     
     #endregion

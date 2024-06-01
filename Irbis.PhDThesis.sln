@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.UI.WPF.Cont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder", "Math\Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder\Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder.csproj", "{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Encryption", "Math\Irbis.PhDThesis.Math.Encryption\Irbis.PhDThesis.Math.Encryption.csproj", "{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.Crypto.Domain", "..\Irbis.Crypto\Domain\Irbis.Crypto.Domain\Irbis.Crypto.Domain.csproj", "{D3A30A4A-E5F4-4D35-93B7-BBE03A734C6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,7 @@ Global
 		{C93107D8-9938-4CB9-AF97-06793B0C5277} = {D43D824A-9848-476F-9C82-05AA5A586F53}
 		{20D0C08E-5DC0-4C3A-BBB5-C845EFDF8B35} = {D43D824A-9848-476F-9C82-05AA5A586F53}
 		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F} = {D43D824A-9848-476F-9C82-05AA5A586F53}
+		{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A} = {D43D824A-9848-476F-9C82-05AA5A586F53}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A22CA700-0A26-4D28-B89C-194DA3788A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -102,5 +107,13 @@ Global
 		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3A30A4A-E5F4-4D35-93B7-BBE03A734C6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A30A4A-E5F4-4D35-93B7-BBE03A734C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A30A4A-E5F4-4D35-93B7-BBE03A734C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A30A4A-E5F4-4D35-93B7-BBE03A734C6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

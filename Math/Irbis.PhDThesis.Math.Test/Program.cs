@@ -1,9 +1,13 @@
 ﻿using System.Numerics;
 using System.Text;
+
+using Irbis.Crypto.Domain;
+
 using Irbis.PhDThesis.Domain.Extensions;
 using Irbis.PhDThesis.Math.Domain;
 using Irbis.PhDThesis.Math.Domain.Fraction;
 using Irbis.PhDThesis.Math.Domain.FractionTree;
+using Irbis.PhDThesis.Math.Encryption;
 using Irbis.PhDThesis.Math.FractionTree.CalkinWilf;
 using Irbis.PhDThesis.Math.FractionTree.SternBrokot;
 
@@ -21,14 +25,14 @@ void TestBitsCountInBitArray(
 {
     for (var i = 0; i < 1001; i++)
     {
-        var bitsCountExpected = (uint) i;
+        var bitsCountExpected = i;
         var bitArray = new BitArray(bitsCountExpected);
         Console.WriteLine($"[{i:0000}] {(bitsCountExpected == bitArray.BitsCount ? "P" : "Not p")}assed: expected - {bitsCountExpected:0000}, actual - {bitArray.BitsCount:0000}");
     }
 
     for (var i = 0; i < 1001; i++)
     {
-        var bitsCountExpected = (uint) i;
+        var bitsCountExpected = i;
         var bitArray = new BitArray(Enumerable.Repeat(false, i));
         Console.WriteLine($"[{i:0000}] {(bitsCountExpected == bitArray.BitsCount ? "P" : "Not p")}assed: expected - {bitsCountExpected:0000}, actual - {bitArray.BitsCount:0000}");
     }
@@ -158,7 +162,7 @@ void TestDavid(
     //Array.Sort(continuedFraction);
     //continuedFraction = continuedFraction.Reverse().ToArray();
     //var fraction = continuedFraction.ToFraction();
-    var fraction = new Fraction(3, 4);
+    var fraction = new BigInteger[] { new (128), new (127), new (127), new (126), new (125), new (123), new (122), new (122), new (120), new (119), new (118), new (117), new (117), new (116), new (115), new (110), new (105), new (101), new (98), new (97) }.ToFraction();
     Console.Write(fraction);
     Console.WriteLine($", total bits for numerator and denominator as numbers == {GetFractionBitsCount(fraction)}");
 
@@ -240,6 +244,305 @@ void TestSternBrokotTreePaths()
     }
 }
 
+void TestVertexIncidence()
+{
+    var hg = new HomogenousHypergraph(10, 4, new HyperEdge[] { new (0, 1, 2, 3), new (0, 1, 2, 4), new (0, 1, 2, 5), new (0, 1, 2, 6), new (0, 1, 2, 7), new (0, 1, 2, 8), new (0, 1, 2, 9), new (0, 1, 3, 4), new (0, 1, 3, 5), new (0, 1, 3, 6), new (0, 1, 3, 7), new (0, 1, 3, 8), new (0, 1, 3, 9), new (0, 1, 4, 5), new (0, 1, 4, 6), new (0, 1, 4, 7), new (0, 1, 4, 8), new (0, 1, 4, 9), new (0, 1, 5, 6), new (0, 1, 5, 7), new (0, 1, 5, 8), new (0, 1, 5, 9), new (0, 1, 6, 7), new (0, 1, 6, 8), new (0, 1, 6, 9), new (0, 1, 7, 8), new (0, 1, 7, 9), new (0, 1, 8, 9) });
+
+    foreach (var simplex in hg.GetSimplicesIncidentToVertex(9))
+    {
+        Console.WriteLine($"{{{simplex}}}");
+    }
+}
+
+void TestEncryptionByteArray()
+{
+    var key = new HomogenousHypergraph(4, 3, new HyperEdge[] { new(0, 1, 2), new (0, 1, 3) });
+
+    var algorithm = new HomogenousHypergraphEncryptor(key, 2);
+
+    var block = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 31, 0, 0, 0, 0 };
+
+    var encryptionResult = CryptoTransformationContext.PerformCipher(algorithm, 1, CipherMode.ElectronicCodebook, PaddingMode.Zeros, CipherTransformationMode.Encryption, null, block);
+
+    var decryptionResult = CryptoTransformationContext.PerformCipher(algorithm, 1, CipherMode.ElectronicCodebook, PaddingMode.Zeros, CipherTransformationMode.Decryption, null, block);
+}
+
+async Task CreateRandomFileAsync(
+    string filePath,
+    CancellationToken cancellationToken = default)
+{
+    var randomSource = new Random();
+    var bytes = new byte[1024];
+    await using var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+    
+    for (var i = 0; i < 1024; ++i)
+    {
+        for (var j = 0; j < 1024; ++j)
+        {
+            randomSource.NextBytes(bytes);
+            await writer.WriteAsync(bytes.AsMemory(0, bytes.Length), cancellationToken).ConfigureAwait(false);
+        }
+    }
+}
+
+async Task TestFileEncryptionAsync(
+    string inputFilePath,
+    string encryptedFilePath,
+    string decryptedFilePath,
+    HomogenousHypergraph key,
+    int coresToUseCount,
+    int smallBlockSize,
+    CipherMode cipherMode,
+    PaddingMode paddingMode,
+    byte[] initializationVector,
+    CancellationToken cancellationToken = default)
+{
+    var algorithm = new HomogenousHypergraphEncryptor(key, smallBlockSize);
+
+    await CryptoTransformationContext.PerformCipherAsync(algorithm, coresToUseCount, cipherMode, paddingMode, CipherTransformationMode.Encryption, initializationVector, inputFilePath, encryptedFilePath, cancellationToken).ConfigureAwait(false);
+    await CryptoTransformationContext.PerformCipherAsync(algorithm, coresToUseCount, cipherMode, paddingMode, CipherTransformationMode.Decryption, initializationVector, encryptedFilePath, decryptedFilePath, cancellationToken).ConfigureAwait(false);
+}
+
+async Task<string?> CheckFilesEqualityAsync(
+    string initialFilePath,
+    string decryptedFilePath,
+    CancellationToken cancellationToken = default)
+{
+    await using var inputFileReader = new FileStream(initialFilePath, FileMode.Open, FileAccess.Read);
+    await using var decryptedFileReader = new FileStream(decryptedFilePath, FileMode.Open, FileAccess.Read);
+
+    if (inputFileReader.Length != decryptedFileReader.Length)
+    {
+        return $"Not eq by length: input len == {inputFileReader.Length}, decrypted len == {decryptedFileReader.Length}";
+    }
+
+    const int blockSize = 1024;
+
+    var inputFileBytes = new byte[blockSize];
+    var decryptedFileBytes = new byte[blockSize];
+    var blockIndex = 0;
+    var byteIndex = 0;
+    
+    while (byteIndex < inputFileReader.Length)
+    {
+        byteIndex += await inputFileReader.ReadAsync(inputFileBytes.AsMemory(0, inputFileBytes.Length), cancellationToken).ConfigureAwait(false);
+        await decryptedFileReader.ReadAsync(decryptedFileBytes.AsMemory(0, decryptedFileBytes.Length), cancellationToken).ConfigureAwait(false);
+
+        if (!inputFileBytes.SequenceEqual(decryptedFileBytes))
+        {
+            return $"Not eq by value, block # == {blockIndex}";
+        }
+
+        ++blockIndex;
+    }
+
+    return null;
+}
+
+async Task TestEncryptionAsync(
+    string initialFilePath,
+    CancellationToken cancellationToken = default)
+{
+    string GetShortFriendlyCipherTransformationModeName(
+        CipherTransformationMode cipherTransformationMode)
+    {
+        return cipherTransformationMode switch
+        {
+            CipherTransformationMode.Encryption => "ENC",
+            CipherTransformationMode.Decryption => "DEC",
+            _ => throw new ArgumentOutOfRangeException(nameof(cipherTransformationMode))
+        };
+    }
+
+    string GetFriendlyCipherModeName(
+        CipherMode _cipherMode)
+    {
+        return _cipherMode switch
+        {
+            CipherMode.ElectronicCodebook => "ECB",
+            CipherMode.CipherBlockChaining => "CBC",
+            CipherMode.PropagatingCipherBlockChaining => "PCBC",
+            CipherMode.CipherFeedback => "CFB",
+            CipherMode.OutputFeedback => "OFB",
+            CipherMode.CounterMode => "CTR",
+            CipherMode.RandomDelta => "RD",
+            _ => throw new ArgumentOutOfRangeException(nameof(_cipherMode))
+        };
+    }
+        
+    string GetFriendlyPaddingModeName(
+        PaddingMode _paddingMode)
+    {
+        return _paddingMode switch
+        {
+            PaddingMode.Zeros => "Zeros",
+            PaddingMode.ISO10126 => "ISO10126",
+            PaddingMode.ANSIX923 => "ANSIX923",
+            PaddingMode.PKCS7 => "PKCS7",
+            _ => throw new ArgumentOutOfRangeException(nameof(_paddingMode))
+        };
+    }
+    
+    string ConstructFilePath(
+        string initialFilePath,
+        CipherTransformationMode cipherTransformationMode, 
+        int coresToUseCount,
+        int smallBlockSize,
+        int keyIndex,
+        int initializationVectorIndex,
+        CipherMode cipherMode,
+        PaddingMode paddingMode)
+    {
+
+        var initialFilePathInfo = new FileInfo(initialFilePath);
+        var fileDirectory = initialFilePathInfo.Directory!;
+        var fileName = Path.GetFileNameWithoutExtension(initialFilePath);
+        var fileExtension = initialFilePathInfo.Extension;
+        
+        return Path.Combine(fileDirectory.FullName, $"{fileName}_crs{coresToUseCount}_sbs{smallBlockSize}_key{keyIndex}_iv{initializationVectorIndex}_cmd{GetFriendlyCipherModeName(cipherMode)}_pmd{GetFriendlyPaddingModeName(paddingMode)}_{GetShortFriendlyCipherTransformationModeName(cipherTransformationMode)}{fileExtension}");
+    }
+    
+    string ConstructLogPrefix(
+        int coresToUseCount,
+        int smallBlockSize,
+        int keyIndex,
+        int initializationVectorIndex,
+        CipherMode cipherMode,
+        PaddingMode paddingMode)
+    {
+        return $"Cores to use count = {coresToUseCount}, small block size = {smallBlockSize}, key id = {keyIndex}, IV index = {initializationVectorIndex}, cipher mode = {GetFriendlyCipherModeName(cipherMode)}, padding mode = {GetFriendlyPaddingModeName(paddingMode)}";
+    }
+    
+    var coresCountEnumerable = Enumerable.Range(1, 1);
+    var smallBlocksSizes = Enumerable.Range(1, 1);
+    var keys = new HomogenousHypergraph[]
+    {
+        new (6, 3, new HyperEdge[] { new(0, 1, 2), new (0, 1, 3), new (0, 1, 4), new (0, 1, 5), new (0, 2, 5), new (0, 3, 4), new (0, 4, 5) }),
+        //new (6, 4, new HyperEdge[] { new (0, 1, 2, 3), new (1, 2, 3, 5), new (2, 3, 4, 5) }),
+        //new (10, 3, new HyperEdge[] { new (0, 1, 2), new (1, 2, 3), new (2, 3, 5), new (3, 4, 8), new (3, 4, 9), new (3, 6, 9), new (5, 7, 8), new (5, 7, 9), new (6, 7, 8), new (6, 7, 9), new (7, 8, 9), new (0, 3, 8) })
+    };
+    var cipherModes = Enum.GetValues<CipherMode>();
+    var paddingModes = Enum.GetValues<PaddingMode>();
+    var initializationVectors = new[]
+    {
+        new byte[6],
+        //new byte[12],
+        //new byte[18],
+        //new byte[24],
+        //new byte[36],
+        //new byte[42],
+        //new byte[48],
+        //new byte[54],
+        //new byte[10],
+        //new byte[20],
+        //new byte[30],
+        //new byte[40],
+        //new byte[50],
+        //new byte[60],
+        //new byte[70],
+        //new byte[80],
+        //new byte[90],
+        //new byte[100]
+    };
+    var randomSource = new Random(123456);
+    foreach (var initializationVector in initializationVectors)
+    {
+        randomSource.NextBytes(initializationVector);
+    }
+
+    await Task.WhenAll(coresCountEnumerable
+        .CartesianProduct(smallBlocksSizes)
+        .CartesianProduct(Enumerable.Range(0, keys.Length))
+        .CartesianProduct(cipherModes)
+        .CartesianProduct(paddingModes)
+        .CartesianProduct(Enumerable.Range(0, initializationVectors.Length))
+        .Select(parameters =>
+        {
+            var coresToUseCount = parameters.Item1.Item1.Item1.Item1.Item1;
+            var smallBlockSize = parameters.Item1.Item1.Item1.Item1.Item2;
+            var keyIndex = parameters.Item1.Item1.Item1.Item2;
+            var cipherMode = parameters.Item1.Item1.Item2;
+            var paddingMode = parameters.Item1.Item2;
+            var initializationVectorIndex = parameters.Item2;
+        
+            var encryptedFilePath = ConstructFilePath(initialFilePath, CipherTransformationMode.Encryption, coresToUseCount, smallBlockSize, keyIndex, initializationVectorIndex, cipherMode, paddingMode);
+            var decryptedFilePath = ConstructFilePath(initialFilePath, CipherTransformationMode.Decryption, coresToUseCount, smallBlockSize, keyIndex, initializationVectorIndex, cipherMode, paddingMode);
+
+            async Task Cipher(
+                CancellationToken cancellationTokenInner = default)
+            {
+                try
+                {
+                    await TestFileEncryptionAsync(initialFilePath, encryptedFilePath, decryptedFilePath, keys[keyIndex], coresToUseCount, smallBlockSize, cipherMode, paddingMode, initializationVectors[initializationVectorIndex], cancellationTokenInner).ConfigureAwait(false);
+                    var filesComparisonResultLog = await CheckFilesEqualityAsync(initialFilePath, decryptedFilePath, cancellationTokenInner).ConfigureAwait(false);
+                    Console.WriteLine($"{ConstructLogPrefix(coresToUseCount, smallBlockSize, keyIndex, initializationVectorIndex, cipherMode, paddingMode)}: {(filesComparisonResultLog == null ? $"unexpected behavior: {filesComparisonResultLog}" : "OK")}");
+                }
+                catch (Exception ex)
+                {
+                    File.Delete(encryptedFilePath);
+                    File.Delete(decryptedFilePath);
+                    Console.WriteLine($"{ConstructLogPrefix(coresToUseCount, smallBlockSize, keyIndex, initializationVectorIndex, cipherMode, paddingMode)}: exception: {ex.Message}");
+                }
+            }
+
+            return Cipher(cancellationToken);
+        }));
+}
+
+void TestKeyDecompression()
+{
+    var initial = new VerticesDegreesVector(3, 3, 3, 3, 3);
+    var diffsTransformed = VerticesDegreesVectorCompressor.ToDiffArray(initial);
+    var transformed = VerticesDegreesVectorCompressor.Compress(initial);
+    var diffsTransformedBack = VerticesDegreesVectorCompressor.FromDiffArray(diffsTransformed);
+    var transformedBack = VerticesDegreesVectorCompressor.Decompress(transformed);
+    
+    var sb = new SternBrokotTree();
+    var cf = diffsTransformed.Select(x => new BigInteger(x)).ToFraction();
+    var path = sb.FindPathByFraction(cf);
+    var cf2 = sb.FindFractionByPath(path);
+    var diffsFromCf = cf2.ToContinuedFraction().Select(x => (int)x).ToArray();
+    
+    foreach (var item in initial)
+    {
+        Console.Write($"{item} ");
+    }
+    Console.WriteLine();
+    foreach (var item in diffsTransformed)
+    {
+        Console.Write($"{item} ");
+    }
+    Console.WriteLine();
+    foreach (var item in transformed)
+    {
+        Console.Write($"{(item ? 1 : 0)}");
+    }
+    Console.WriteLine();
+    foreach (var item in diffsTransformedBack)
+    {
+        Console.Write($"{item} ");
+    }
+    Console.WriteLine();
+    foreach (var item in transformedBack)
+    {
+        Console.Write($"{item} ");
+    }
+}
+
+void TestVerticesDegreesVectorConstruction(
+    int simplicesDimension,
+    int verticesCount)
+{
+    foreach (var generatedVerticesDegreesVector in VerticesDegreesVectorConstructor.ConstructAllExtremalVerticesDegreesVectors(verticesCount, simplicesDimension))
+    {
+        foreach (var item in generatedVerticesDegreesVector)
+        {
+            Console.Write($"{item} ");
+        }
+        Console.WriteLine();
+    }
+}
+
 // TestBitsCountInBitArray();
 // TestHomogenousHypergraphConstruction();
 // TestHomogenousHypergraphIteration();
@@ -248,5 +551,194 @@ void TestSternBrokotTreePaths()
 // TestFractionTrees();
 // TestDavid();
 // TestWhoIsShorter();
+// TestSternBrokotTreePaths();
+// TestVertexIncidence();
+// TestEncryptionByteArray();
+// await TestEncryptionFile(@"C:\Users\scarl\University\Irbis.PhDThesis\kek.txt", @"C:\Users\scarl\University\Irbis.PhDThesis\enc.txt", @"C:\Users\scarl\University\Irbis.PhDThesis\dec.txt");
+// await TestEncryptionAsync(@"C:\Users\scarl\University\Irbis.PhDThesis\Files\Initial.jpg");
+TestKeyDecompression();
+TestVerticesDegreesVectorConstruction(3, 8);
 
-TestSternBrokotTreePaths();
+static class VerticesDegreesVectorCompressor
+{
+    
+    private static readonly SternBrokotTree _fractionTree = new ();
+
+    public static BitArray Compress(
+        VerticesDegreesVector vector)
+    {
+        var diffArray = ToDiffArray(vector);
+        var firstValueBitsCount = BitOperations.Log2((uint)(diffArray[0] + 1));
+        var result = new BitArray(sizeof(byte) * 8 + firstValueBitsCount + diffArray.Skip(1).Sum(x => (int)x) - 1);
+
+        for (var i = 0; i < sizeof(byte) * 8; ++i)
+        {
+            result[i] = ((firstValueBitsCount >> i) & 1) == 1;
+        }
+        
+        for (var i = 0; i < firstValueBitsCount; ++i)
+        {
+            result[i + sizeof(byte) * 8] = ((diffArray[0] >> i) & 1) == 1;
+        }
+
+        var convertedPath = _fractionTree.FindPathByFraction(diffArray.Skip(1).Select(x => new BigInteger(x)).ToFraction());
+        foreach (var convertedPathBit in convertedPath)
+        {
+            result[sizeof(byte) * 8 + firstValueBitsCount++] = convertedPathBit;
+        }
+
+        return result;
+    }
+
+    public static VerticesDegreesVector Decompress(
+        BitArray transformedVerticesDegreesVector)
+    {
+        byte firstValueBitsCount = 0;
+        for (var i = 0; i < sizeof(byte) * 8; ++i)
+        {
+            if (!transformedVerticesDegreesVector[i])
+            {
+                continue;
+            }
+
+            firstValueBitsCount |= (byte)(1 << i);
+        }
+
+        int firstValue = 0;
+        for (var i = 0; i < firstValueBitsCount; ++i)
+        {
+            if (!transformedVerticesDegreesVector[sizeof(byte) * 8 + i])
+            {
+                continue;
+            }
+
+            firstValue |= 1 << i;
+        }
+
+        var diffArray = _fractionTree.FindFractionByPath(
+                new BitArray(transformedVerticesDegreesVector.Skip(sizeof(byte) * 8 + firstValueBitsCount)))
+            .ToContinuedFraction()
+            .Select(x => (int)x)
+            .Prepend(firstValue)
+            .ToArray();
+
+        return FromDiffArray(diffArray);
+    }
+
+    public static int[] ToDiffArray(
+        VerticesDegreesVector vector)
+    {
+        var degreesValues = vector.Reverse().ToArray();
+        var result = new int[degreesValues.Length];
+
+        var previousDegree = result[0] = degreesValues.First();
+        degreesValues.Skip(1).ForEach((currentDegree, index) =>
+        {
+            result[index + 1] = currentDegree - previousDegree + 1;
+            previousDegree = currentDegree;
+        });
+        ++result[^1];
+        
+        return result;
+    }
+
+    public static VerticesDegreesVector FromDiffArray(
+        int[] diffArray)
+    {
+        var modifiedDiffsArray = (int[])diffArray.Clone();
+        --modifiedDiffsArray[^1];
+        
+        for (var i = 1; i < modifiedDiffsArray.Length; ++i)
+        {
+            modifiedDiffsArray[i] += modifiedDiffsArray[i - 1];
+            --modifiedDiffsArray[i];
+        }
+
+        return new VerticesDegreesVector(modifiedDiffsArray.Reverse().ToArray());
+    }
+    
+}
+
+static class VerticesDegreesVectorConstructor
+{
+    
+    public static IEnumerable<VerticesDegreesVector> ConstructAllVerticesDegreesVectors(
+        int verticesCount,
+        int simplicesDimension)
+    {
+        IEnumerable<VerticesDegreesVector> Generate(
+            int[] resultVerticesDegreesVectorCoefficients,
+            BigInteger setUpVerticesDegreesSum,
+            int vertexDegreeIndexToSetUp,
+            BigInteger maxVertexDegree)
+        {
+            if (setUpVerticesDegreesSum < BigInteger.Zero)
+            {
+                yield break;
+            }
+        
+            if (vertexDegreeIndexToSetUp == resultVerticesDegreesVectorCoefficients.Length)
+            {
+                if (setUpVerticesDegreesSum == 0)
+                {
+                    yield return new VerticesDegreesVector(resultVerticesDegreesVectorCoefficients);
+                }
+
+                yield break;
+            }
+
+            for (var i = 1; i <= (vertexDegreeIndexToSetUp == 0
+                     ? maxVertexDegree
+                     : resultVerticesDegreesVectorCoefficients[vertexDegreeIndexToSetUp - 1]); ++i)
+            {
+                resultVerticesDegreesVectorCoefficients[vertexDegreeIndexToSetUp] = i;
+                foreach (var generatedVerticesDegreesVector in Generate(resultVerticesDegreesVectorCoefficients, setUpVerticesDegreesSum - i, vertexDegreeIndexToSetUp + 1, maxVertexDegree))
+                {
+                    yield return generatedVerticesDegreesVector;
+                }
+            }
+        }
+
+        var minSum = verticesCount * (BigInteger)2;
+        var maxVertexDegree = BigIntegerExtensions.CombinationsCount(verticesCount - 1, simplicesDimension - 1);
+        var maxSum = verticesCount * maxVertexDegree;
+
+        // TODO: Guardant
+
+        for (var sum = 0; sum <= maxSum; sum += simplicesDimension)
+        {
+            foreach (var generatedVerticesDegreesVector in Generate(new int[verticesCount], sum, 0, maxVertexDegree))
+            {
+                yield return generatedVerticesDegreesVector;
+            }
+        }
+    }
+
+    public static IEnumerable<VerticesDegreesVector> ConstructAllConnectedVerticesDegreesVectors(
+        int verticesCount,
+        int simplicesDimension)
+    {
+        // TODO: implement me plz
+        return ConstructAllVerticesDegreesVectors(verticesCount, simplicesDimension)
+            .Select(x => x);
+    }
+
+    public static IEnumerable<VerticesDegreesVector> ConstructAllTheOnlyWayRestorableVerticesDegreesVectors(
+        int verticesCount,
+        int simplicesDimension)
+    {
+        // TODO: implement me plz
+        return ConstructAllVerticesDegreesVectors(verticesCount, simplicesDimension)
+            .Select(x => x);
+    }
+
+    public static IEnumerable<VerticesDegreesVector> ConstructAllExtremalVerticesDegreesVectors(
+        int verticesCount,
+        int simplicesDimension)
+    {
+        // TODO: implement me plz
+        return ConstructAllVerticesDegreesVectors(verticesCount, simplicesDimension)
+            .Select(x => x);
+    }
+    
+}
