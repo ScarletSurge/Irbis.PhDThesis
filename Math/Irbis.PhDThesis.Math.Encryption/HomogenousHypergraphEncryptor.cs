@@ -13,9 +13,20 @@ public sealed class HomogenousHypergraphEncryptor:
 {
     
     #region Fields
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
     private readonly HomogenousHypergraph _key;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     private readonly int _smallBlockSize;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     private readonly int[][] _homogenousHypergraphVerticesIncidence;
     
     #endregion
@@ -43,7 +54,6 @@ public sealed class HomogenousHypergraphEncryptor:
         {
             _homogenousHypergraphVerticesIncidence[i] = key.GetIncidentVerticesIndicesFor(i)
                 .Where(incidentVertexIndex => incidentVertexIndex > i)
-                .Select(x => (int)x)
                 .ToArray();
         }
     }
@@ -104,19 +114,19 @@ public sealed class HomogenousHypergraphEncryptor:
             
             Array.Clear(Y, 0, Y.Length);
             
-            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[j])
+            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[jCopy])
             {
                 Xor(Y, 0, output, _smallBlockSize * incidentVertexIndex, _smallBlockSize);
             }
 
-            if ((_homogenousHypergraphVerticesIncidence[j].Length & 1) == 0)
+            if ((_homogenousHypergraphVerticesIncidence[jCopy].Length & 1) == 1)
             {
                 Xor(Y, 0, output, _smallBlockSize * jCopy, _smallBlockSize);
             }
             
             Xor(output, _smallBlockSize * jCopy, Y, 0, _smallBlockSize);
             
-            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[j])
+            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[jCopy])
             {
                 Xor(output, _smallBlockSize * incidentVertexIndex, Y, 0, _smallBlockSize);
             }
@@ -149,20 +159,19 @@ public sealed class HomogenousHypergraphEncryptor:
             var jCopy = j;
             
             Array.Clear(Y, 0, Y.Length);
-            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[j])
+            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[jCopy])
             {
                 Xor(Y, 0, output, _smallBlockSize * incidentVertexIndex, _smallBlockSize);
             }
             
-            if ((_homogenousHypergraphVerticesIncidence[j].Length & 1) == 1)
+            if ((_homogenousHypergraphVerticesIncidence[jCopy].Length & 1) == 1)
             {
                 Xor(Y, 0, output, _smallBlockSize * jCopy, _smallBlockSize);
-
             }
             
             Xor(output, _smallBlockSize * jCopy, Y, 0, _smallBlockSize);
                 
-            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[j])
+            foreach (var incidentVertexIndex in _homogenousHypergraphVerticesIncidence[jCopy])
             {
                 Xor(output, _smallBlockSize * incidentVertexIndex, Y, 0, _smallBlockSize);
             }
