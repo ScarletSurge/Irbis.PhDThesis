@@ -10,6 +10,8 @@ namespace Irbis.PhDThesis.Domain.Extensions;
 public static class BigIntegerExtensions
 {
     
+    #region Methods
+    
     /// <summary>
     /// 
     /// </summary>
@@ -86,5 +88,7 @@ public static class BigIntegerExtensions
         
         return partialResult / k.Factorial();
     }
+    
+    #endregion
     
 }

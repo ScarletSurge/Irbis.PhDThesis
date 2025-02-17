@@ -167,7 +167,7 @@
                              Command="{Binding SetupRestorationAlgorithmCommand, Mode=OneWay}"
                              CommandParameter="{x:Static reconstruction:RestorationAlgorithmFromVerticesDegreesVector.Reduction}" />
             </StackPanel>
-            <controls:Spinner Grid.Row="3"
+            <!--controls:Spinner Grid.Row="3"
                               Grid.Column="0"
                               Margin="5"
                               SpinnerItemsColor="Gray">
@@ -181,7 +181,7 @@
                         </MultiBinding.Bindings>
                     </MultiBinding>
                 </controls:Spinner.Visibility>
-            </controls:Spinner>
+            </controls:Spinner-->
             <localControls:HomogenousHypergraphCanvas Grid.Row="3"
                                                       Grid.Column="0"
                                                       Margin="5"
@@ -191,7 +191,7 @@
                         <MultiBinding.Bindings>
                             <Binding Path="RestorationOperationInProgress"
                                      Mode="OneWay" />
-                            <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Collapsed}" />
+                            <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Visible}" /> <!-- Collapsed -->
                             <Binding Source="{x:Static systemWindowsPresentationCore:Visibility.Visible}" />
                         </MultiBinding.Bindings>
                     </MultiBinding>

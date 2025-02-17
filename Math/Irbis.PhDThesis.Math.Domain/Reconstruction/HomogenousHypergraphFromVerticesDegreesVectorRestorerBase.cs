@@ -6,18 +6,18 @@ namespace Irbis.PhDThesis.Math.Domain.Reconstruction;
 /// <summary>
 /// 
 /// </summary>
-public abstract class HomogenousHypergraphFromVerticesDegreesVectorReconstructorBase:
-    HomogenousHypergraphReconstructorBase<VerticesDegreesVector>
+public abstract class HomogenousHypergraphFromVerticesDegreesVectorRestorerBase:
+    HomogenousHypergraphRestorerBase<VerticesDegreesVector>
 {
     
-    #region Irbis.PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphReconstructorBase<VerticesDegreesVector> overrides
+    #region Irbis.PhDThesis.Math.Domain.Reconstruction.HomogenousHypergraphRestorerBase<VerticesDegreesVector> overrides
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="from"></param>
     /// <param name="simplicesDimension"></param>
-    protected sealed override HomogenousHypergraphReconstructorBase<VerticesDegreesVector> ThrowIfInvalidInputPrototype(
+    protected sealed override HomogenousHypergraphRestorerBase<VerticesDegreesVector> ThrowIfInvalidInputPrototype(
         VerticesDegreesVector from,
         int simplicesDimension)
     {

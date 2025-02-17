@@ -499,7 +499,7 @@ async Task TestEncryptionAsync(
 
 void TestKeyDecompression()
 {
-    var initial = new VerticesDegreesVector(250, 249, 249, 249, 248, 248, 248, 247, 247, 247, 247, 247, 246);
+    var initial = new VerticesDegreesVector(14, 13, 13, 13, 13, 12, 12, 12, 12, 11, 11, 10, 9, 9, 8);
     var diffsTransformed = VerticesDegreesVectorCompressor.ToDiffArray(initial);
     var transformed = VerticesDegreesVectorCompressor.Compress(initial);
     var diffsTransformedBack = VerticesDegreesVectorCompressor.FromDiffArray(diffsTransformed);
@@ -566,9 +566,9 @@ void TestVerticesDegreesVectorConstruction(
 // TestVertexIncidence();
 // TestEncryptionByteArray();
 // await TestEncryptionFile(@"C:\Users\scarl\University\Irbis.PhDThesis\kek.txt", @"C:\Users\scarl\University\Irbis.PhDThesis\enc.txt", @"C:\Users\scarl\University\Irbis.PhDThesis\dec.txt");
-await TestEncryptionAsync(@"C:\Users\scarl\University\Irbis.PhDThesis\Files\Initial.jpg");
-// TestKeyDecompression();
-// TestVerticesDegreesVectorConstruction(3, 7);
+// await TestEncryptionAsync(@"C:\Users\scarl\University\Irbis.PhDThesis\Files\Initial.jpg");
+TestKeyDecompression();
+// TestVerticesDegreesVectorConstruction(2, 7);
 
 static class VerticesDegreesVectorCompressor
 {
@@ -716,8 +716,7 @@ static class VerticesDegreesVectorConstructor
                 }
             }
         }
-
-        var minSum = verticesCount * (BigInteger)2;
+        
         var maxVertexDegree = BigIntegerExtensions.CombinationsCount(verticesCount - 1, simplicesDimension - 1);
         var maxSum = verticesCount * maxVertexDegree;
 

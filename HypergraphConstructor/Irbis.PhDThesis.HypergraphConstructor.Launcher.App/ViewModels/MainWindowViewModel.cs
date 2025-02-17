@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+
 using Irbis.WPF.MVVM.Core.Commands;
 using Irbis.WPF.MVVM.Core.ViewModels;
 
@@ -19,9 +21,9 @@ namespace Irbis.PhDThesis.HypergraphConstructor.Launcher.App.ViewModels;
 /// <summary>
 /// 
 /// </summary>
-internal sealed class MainWindowViewModel
-    : ViewModelBase,
-      IDisposable
+internal sealed class MainWindowViewModel:
+    ViewModelBase,
+    IDisposable
 {
 
     #region Fields
@@ -83,7 +85,7 @@ internal sealed class MainWindowViewModel
     /// <summary>
     /// 
     /// </summary>
-    private readonly IReadOnlyDictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorReconstructorBase> _reconstructors;
+    private readonly IReadOnlyDictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorRestorerBase> _reconstructors;
     
     /// <summary>
     /// 
@@ -99,11 +101,11 @@ internal sealed class MainWindowViewModel
     /// </summary>
     public MainWindowViewModel()
     {
-        _reconstructors = new ReadOnlyDictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorReconstructorBase>(
-            new Dictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorReconstructorBase>
+        _reconstructors = new ReadOnlyDictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorRestorerBase>(
+            new Dictionary<RestorationAlgorithmFromVerticesDegreesVector, HomogenousHypergraphFromVerticesDegreesVectorRestorerBase>
             {
-                { RestorationAlgorithmFromVerticesDegreesVector.Greedy, new HomogenousHypergraphFromVerticesDegreesVectorGreedyReconstructor() },
-                { RestorationAlgorithmFromVerticesDegreesVector.Reduction, new HomogenousHypergraphFromVerticesDegreesVectorReductionReconstructor() }
+                { RestorationAlgorithmFromVerticesDegreesVector.Greedy, new HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer() },
+                { RestorationAlgorithmFromVerticesDegreesVector.Reduction, new HomogenousHypergraphFromVerticesDegreesVectorReductionRestorer() }
             });
         _quitCommand = new Lazy<ICommand>(new RelayCommand(_ => QuitCommandAction()));
         _showHelpCommand = new Lazy<ICommand>(new RelayCommand(_ => ShowHelpCommandAction()));
@@ -269,11 +271,11 @@ internal sealed class MainWindowViewModel
         if (RestorationOperationInProgress)
         {
             _restorationOperationCancellationSource.Cancel();
+            
             return;
         }
         
-        var verticesDegreesStrings =
-            VerticesDegreesVectorString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var verticesDegreesStrings = VerticesDegreesVectorString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
         if (verticesDegreesStrings.Length == 0)
         {
@@ -304,12 +306,18 @@ internal sealed class MainWindowViewModel
 
             return;
         }
-
+        
         try
         {
             RestorationOperationInProgress = true;
-            ConstructedHypergraph = await _reconstructors[RestorationAlgorithm]
-                .RestoreAsync(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension, cancellationToken);
+
+            var hgs = _reconstructors[RestorationAlgorithm].RestoreAll(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension);
+
+            foreach (var hg in hgs)
+            {
+                ConstructedHypergraph = hg;
+                await Task.Delay(40, cancellationToken);
+            }
         }
         catch (OperationCanceledException)
         {
@@ -318,7 +326,6 @@ internal sealed class MainWindowViewModel
         }
         catch (Exception)
         {
-            RestorationOperationInProgress = false;
             MessageBox.Show("Vertices degrees vector couldn't be restored into hypergraph.");
         }
         finally
@@ -338,6 +345,7 @@ internal sealed class MainWindowViewModel
     {
         _restorationOperationCancellationSource?.Cancel();
         _restorationOperationCancellationSource?.Dispose();
+        
         GC.SuppressFinalize(this);
     }
     

@@ -6,6 +6,8 @@
 public static class IEnumerableTExtensions
 {
     
+    #region Methods
+    
     /// <summary>
     /// 
     /// </summary>
@@ -43,7 +45,16 @@ public static class IEnumerableTExtensions
             }
         }
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="firstEnumerable"></param>
+    /// <param name="secondEnumerable"></param>
+    /// <param name="predicate"></param>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <returns></returns>
     public static IEnumerable<(T1, T2)> CartesianProduct<T1, T2>(
         this IEnumerable<T1> firstEnumerable,
         IEnumerable<T2> secondEnumerable,
@@ -53,5 +64,7 @@ public static class IEnumerableTExtensions
             .CartesianProduct(secondEnumerable)
             .Where(x => predicate(x.Item1, x.Item2));
     }
+    
+    #endregion
 
 }
