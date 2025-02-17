@@ -6,16 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\Irbis.Crypto\Domain\Irbis.Crypto.Domain\Irbis.Crypto.Domain.csproj" />
-    </ItemGroup>
-    
     <!--ItemGroup>
-      <PackageReference Include="Irbis.Crypto.Domain" Version="0.0.1" />
+        <ProjectReference Include="..\..\..\Irbis.Crypto\Domain\Irbis.Crypto.Domain\Irbis.Crypto.Domain.csproj" />
     </ItemGroup-->
+    
+    <ItemGroup>
+        <PackageReference Include="Irbis.Crypto.Domain" Version="0.0.2" />
+    </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
+        <ProjectReference Include="..\Irbis.PhDThesis.Math.Domain\Irbis.PhDThesis.Math.Domain.csproj" />
     </ItemGroup>
 
 </Project>
