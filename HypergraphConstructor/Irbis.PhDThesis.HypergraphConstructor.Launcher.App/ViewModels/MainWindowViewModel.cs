@@ -311,13 +311,18 @@ internal sealed class MainWindowViewModel:
         {
             RestorationOperationInProgress = true;
 
-            var hgs = _reconstructors[RestorationAlgorithm].RestoreAll(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension);
+            var hgs = _reconstructors[RestorationAlgorithm].RestoreAllAsync(new VerticesDegreesVector(verticesDegreesVector), SimplicesDimension, cancellationToken);
 
-            foreach (var hg in hgs)
+            var count = 0;
+            
+            await foreach (var hg in hgs.WithCancellation(cancellationToken))
             {
-                ConstructedHypergraph = hg;
-                await Task.Delay(40, cancellationToken);
+                ++count;
+                //ConstructedHypergraph = hg;
+                //await Task.Delay(40, cancellationToken);
             }
+
+            MessageBox.Show($"{count}");
         }
         catch (OperationCanceledException)
         {

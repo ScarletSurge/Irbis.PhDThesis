@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{92619AF9-1A3E-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.UI.WPF.Controls", "UI\Irbis.PhDThesis.UI.WPF.Controls\Irbis.PhDThesis.UI.WPF.Controls.csproj", "{DEEBBC4C-AD2D-4A1C-95E7-7570551BE753}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder", "Math\Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder\Irbis.PhDThesis.Math.Reconstruction.DatabaseBuilder.csproj", "{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.HypergraphSynthesis", "Math\Irbis.PhDThesis.Math.HypergraphSynthesis\Irbis.PhDThesis.Math.HypergraphSynthesis.csproj", "{7EF01938-9218-42A1-ABFD-0B9F8ECD384F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irbis.PhDThesis.Math.Encryption", "Math\Irbis.PhDThesis.Math.Encryption\Irbis.PhDThesis.Math.Encryption.csproj", "{27CDCD56-66BA-4BB7-81B7-EA0E4074E73A}"
 EndProject

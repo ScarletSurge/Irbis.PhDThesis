@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Irbis.PhDThesis.Math.Test</RootNamespace>
@@ -13,6 +13,7 @@
       <ProjectReference Include="..\Irbis.PhDThesis.Math.Encryption\Irbis.PhDThesis.Math.Encryption.csproj" />
       <ProjectReference Include="..\Irbis.PhDThesis.Math.FractionTree.CalkinWilf\Irbis.PhDThesis.Math.FractionTree.CalkinWilf.csproj" />
       <ProjectReference Include="..\Irbis.PhDThesis.Math.FractionTree.SternBrokot\Irbis.PhDThesis.Math.FractionTree.SternBrokot.csproj" />
+      <ProjectReference Include="..\Irbis.PhDThesis.Math.HypergraphSynthesis\Irbis.PhDThesis.Math.HypergraphSynthesis.csproj" />
     </ItemGroup>
 
 </Project>

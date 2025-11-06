@@ -10,6 +10,7 @@ using Irbis.PhDThesis.Math.Domain.FractionTree;
 using Irbis.PhDThesis.Math.Encryption;
 using Irbis.PhDThesis.Math.FractionTree.CalkinWilf;
 using Irbis.PhDThesis.Math.FractionTree.SternBrokot;
+using Irbis.PhDThesis.Math.HypergraphSynthesis;
 
 int GetFractionBitsCount(
     Fraction fraction)
@@ -250,7 +251,7 @@ void TestVertexIncidence()
 
 void TestEncryptionByteArray()
 {
-    var algorithm = new HomogenousHypergraphEncryptor(new HomogenousHypergraph(4, 3, new (0, 1, 2), new (0, 1, 3)), 2);
+    var algorithm = new HomogenousHypergraphEncryptor(new HomogenousHypergraph(4, 3, new HyperEdge(0, 1, 2), new HyperEdge(0, 1, 3)), 2);
 
     var block = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
     Console.Write("Initial state: ");
@@ -427,9 +428,9 @@ async Task TestEncryptionAsync(
     var smallBlocksSizes = Enumerable.Range(1, 10);
     var keys = new HomogenousHypergraph[]
     {
-        new (6, 3, new(0, 1, 2), new (0, 1, 3), new (0, 1, 4), new (0, 1, 5), new (0, 2, 5), new (0, 3, 4), new (0, 4, 5)),
-        new (6, 3, new (0, 4, 5), new (1, 2, 3), new (3, 4, 5)),
-        new (6, 3, new (0, 1, 2), new (1, 2, 3), new (2, 3, 4), new (0, 4, 5))
+        new (6, 3, new HyperEdge(0, 1, 2), new HyperEdge(0, 1, 3), new HyperEdge(0, 1, 4), new HyperEdge(0, 1, 5), new HyperEdge(0, 2, 5), new HyperEdge(0, 3, 4), new HyperEdge(0, 4, 5)),
+        new (6, 3, new HyperEdge(0, 4, 5), new HyperEdge(1, 2, 3), new HyperEdge(3, 4, 5)),
+        new (6, 3, new HyperEdge(0, 1, 2), new HyperEdge(1, 2, 3), new HyperEdge(2, 3, 4), new HyperEdge(0, 4, 5))
     };
     var cipherModes = Enum.GetValues<CipherMode>();
     var paddingModes = Enum.GetValues<PaddingMode>();
@@ -554,6 +555,15 @@ void TestVerticesDegreesVectorConstruction(
     Console.Write($"Count: {count}");
 }
 
+void TestRandomHypergraphGeneration(
+    int verticesCount,
+    int simplicesDimension)
+{
+    var hg1 = new HypergraphBuilder().Randomize(verticesCount, simplicesDimension, 12345);
+    Console.WriteLine("Constructed");
+    Console.WriteLine("Passed");
+}
+
 // TestBitsCountInBitArray();
 // TestHomogenousHypergraphConstruction();
 // TestHomogenousHypergraphIteration();
@@ -567,8 +577,9 @@ void TestVerticesDegreesVectorConstruction(
 // TestEncryptionByteArray();
 // await TestEncryptionFile(@"C:\Users\scarl\University\Irbis.PhDThesis\kek.txt", @"C:\Users\scarl\University\Irbis.PhDThesis\enc.txt", @"C:\Users\scarl\University\Irbis.PhDThesis\dec.txt");
 // await TestEncryptionAsync(@"C:\Users\scarl\University\Irbis.PhDThesis\Files\Initial.jpg");
-TestKeyDecompression();
+// TestKeyDecompression();
 // TestVerticesDegreesVectorConstruction(2, 7);
+TestRandomHypergraphGeneration(128, 3);
 
 static class VerticesDegreesVectorCompressor
 {

@@ -83,7 +83,7 @@ public sealed class Guardant
     /// <typeparam name="T"></typeparam>
     public Guardant ThrowIfNull<T>(
         T? value)
-        where T : class
+            where T: class
     {
         return ThrowIf(value, passedValue => passedValue is null, "Value is null.");
     }
@@ -96,7 +96,6 @@ public sealed class Guardant
     public Guardant ThrowIfEmpty<T>(
         IEnumerable<T> value)
     {
-        //return ThrowIf(value, passedValue => !passedValue.Any())
         if (!value.Any())
         {
             throw new GuardantException("Value is empty enumerable.");
@@ -126,7 +125,7 @@ public sealed class Guardant
     public Guardant ThrowIfEqual<T>(
         T initialValue,
         T valueToCompareWith)
-        where T : IEquatable<T>
+            where T: IEquatable<T>
     {
         if (initialValue.Equals(valueToCompareWith))
         {
@@ -167,7 +166,7 @@ public sealed class Guardant
     public Guardant ThrowIfNotEqual<T>(
         T initialValue,
         T valueToCompareWith)
-        where T : IEquatable<T>
+            where T: IEquatable<T>
     {
         if (!initialValue.Equals(valueToCompareWith))
         {
@@ -208,7 +207,7 @@ public sealed class Guardant
     public Guardant ThrowIfLowerThan<T>(
         T initialValue,
         T valueToCompareWith)
-        where T : IComparable<T>
+            where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) < 0)
         {
@@ -249,7 +248,7 @@ public sealed class Guardant
     public Guardant ThrowIfLowerThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith)
-        where T: IComparable<T>
+            where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) <= 0)
         {
@@ -290,7 +289,7 @@ public sealed class Guardant
     public Guardant ThrowIfGreaterThan<T>(
         T initialValue,
         T valueToCompareWith)
-        where T: IComparable<T>
+            where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) > 0)
         {
@@ -331,7 +330,7 @@ public sealed class Guardant
     public Guardant ThrowIfGreaterThanOrEqualTo<T>(
         T initialValue,
         T valueToCompareWith)
-        where T: IComparable<T>
+            where T: IComparable<T>
     {
         if (initialValue.CompareTo(valueToCompareWith) >= 0)
         {

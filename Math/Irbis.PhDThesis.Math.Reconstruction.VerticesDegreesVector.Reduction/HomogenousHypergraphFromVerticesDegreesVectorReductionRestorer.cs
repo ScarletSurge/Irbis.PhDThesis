@@ -1,4 +1,5 @@
-﻿using Irbis.PhDThesis.Domain.Extensions;
+﻿using System.Runtime.CompilerServices;
+using Irbis.PhDThesis.Domain.Extensions;
 using Irbis.PhDThesis.Math.Domain;
 using Irbis.PhDThesis.Math.Domain.Reconstruction;
 
@@ -59,7 +60,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorReductionRestor
         int simplicesDimension,
         uint verticesDegreesSum,
         ISet<HyperEdge> addedSimplices,
-        CancellationToken cancellationToken = default)
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
 

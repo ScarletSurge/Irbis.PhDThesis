@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Immutable;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using Irbis.PhDThesis.Domain.Extensions;
 using Irbis.PhDThesis.Math.Domain;
@@ -13,23 +14,48 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
     HomogenousHypergraphFromVerticesDegreesVectorRestorerBase
 {
     
+    #region Fields
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private static readonly Dictionary<(int SimplicesDimension, int VerticesCount), IImmutableDictionary<int, HyperEdge>> _mappings;
+    
+    #endregion
+    
+    #region Constructors
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    static HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer()
+    {
+        _mappings = new Dictionary<(int SimplicesDimension, int VerticesCount), IImmutableDictionary<int, HyperEdge>>();
+    }
+    
+    #endregion
+
     #region [Obsolete] Recursive restoration
     
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="indexToHyperEdgeMappings"></param>
     /// <param name="from"></param>
     /// <param name="simplicesDimension"></param>
     /// <param name="simplicesMaxCount"></param>
     /// <param name="verticesDegreesSum"></param>
     /// <param name="addedSimplices"></param>
+    /// <param name="lastAddedSimplexIndex"></param>
     /// <returns></returns>
     private IEnumerable<HomogenousHypergraph?> RestoreAllInnerRecursive(
+        IImmutableDictionary<int, HyperEdge> indexToHyperEdgeMappings,
         Domain.VerticesDegreesVector from,
         int simplicesDimension,
         BigInteger simplicesMaxCount,
         uint verticesDegreesSum,
-        ISet<HyperEdge> addedSimplices)
+        ISet<HyperEdge> addedSimplices,
+        int lastAddedSimplexIndex)
     {
         if (verticesDegreesSum == 0)
         {
@@ -37,14 +63,9 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
             yield break;
         }
 
-        var lastAddedSimplex = addedSimplices.LastOrDefault();
-        var lastAddedSimplexIndex = lastAddedSimplex is null
-            ? -1
-            : HomogenousHypergraph.SimplexToBitIndex(lastAddedSimplex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
-
         for (var nextSimplexToAddIndex = lastAddedSimplexIndex + 1; nextSimplexToAddIndex < simplicesMaxCount; nextSimplexToAddIndex++)
         {
-            var simplexToAdd = HomogenousHypergraph.BitIndexToSimplex(nextSimplexToAddIndex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
+            var simplexToAdd = indexToHyperEdgeMappings[nextSimplexToAddIndex];
             if (!from.TryRemoveSimplex(simplexToAdd))
             {
                 continue;
@@ -52,7 +73,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
 
             addedSimplices.Add(simplexToAdd);
 
-            var recursiveRestorations = RestoreAllInnerRecursive(from, simplicesDimension, simplicesMaxCount, (uint)(verticesDegreesSum - simplicesDimension), addedSimplices);
+            var recursiveRestorations = RestoreAllInnerRecursive(indexToHyperEdgeMappings, from, simplicesDimension, simplicesMaxCount, (uint)(verticesDegreesSum - simplicesDimension), addedSimplices, nextSimplexToAddIndex);
 
             foreach (var recursiveRestoration in recursiveRestorations)
             {
@@ -67,19 +88,23 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="indexToHyperEdgeMappings"></param>
     /// <param name="from"></param>
     /// <param name="simplicesDimension"></param>
     /// <param name="simplicesMaxCount"></param>
     /// <param name="verticesDegreesSum"></param>
     /// <param name="addedSimplices"></param>
+    /// <param name="lastAddedSimplexIndex"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     private async IAsyncEnumerable<HomogenousHypergraph?> RestoreAllInnerRecursiveAsync(
+        IImmutableDictionary<int, HyperEdge> indexToHyperEdgeMappings,
         Domain.VerticesDegreesVector from,
         int simplicesDimension,
         BigInteger simplicesMaxCount,
         uint verticesDegreesSum,
         ISet<HyperEdge> addedSimplices,
+        int lastAddedSimplexIndex,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -90,14 +115,9 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
             yield break;
         }
 
-        var lastAddedSimplex = addedSimplices.LastOrDefault();
-        var lastAddedSimplexIndex = lastAddedSimplex is null
-            ? -1
-            : HomogenousHypergraph.SimplexToBitIndex(lastAddedSimplex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
-
         for (var nextSimplexToAddIndex = lastAddedSimplexIndex + 1; nextSimplexToAddIndex < simplicesMaxCount; nextSimplexToAddIndex++)
         {
-            var simplexToAdd = HomogenousHypergraph.BitIndexToSimplex(nextSimplexToAddIndex, simplicesDimension, from.VerticesCount, simplicesMaxCount);
+            var simplexToAdd = indexToHyperEdgeMappings[nextSimplexToAddIndex];
             if (!from.TryRemoveSimplex(simplexToAdd))
             {
                 continue;
@@ -105,7 +125,7 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
 
             addedSimplices.Add(simplexToAdd);
             
-            await foreach (var recursiveRestoration in RestoreAllInnerRecursiveAsync(from, simplicesDimension, simplicesMaxCount, (uint)(verticesDegreesSum - simplicesDimension), addedSimplices, cancellationToken))
+            await foreach (var recursiveRestoration in RestoreAllInnerRecursiveAsync(indexToHyperEdgeMappings, from, simplicesDimension, simplicesMaxCount, (uint)(verticesDegreesSum - simplicesDimension), addedSimplices, nextSimplexToAddIndex, cancellationToken))
             {
                 yield return recursiveRestoration;
             }
@@ -222,7 +242,22 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
         Domain.VerticesDegreesVector from,
         int simplicesDimension)
     {
-        return RestoreAllInnerRecursive((Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension), (uint)from.Sum(x => x), new HashSet<HyperEdge>());
+        var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
+
+        if (!_mappings.TryGetValue((simplicesDimension, from.VerticesCount), out var indexToHyperEdgeMappings))
+        {
+            var indexToHyperEdgeMappingsToAdd = new Dictionary<int, HyperEdge>();
+            for (var i = 0; i < HomogenousHypergraph.GetSimplicesMaxCount(from.VerticesCount, simplicesDimension); ++i)
+            {
+                var hypedEdgeByIndex = HomogenousHypergraph.BitIndexToSimplex(i, simplicesDimension, from.VerticesCount, simplicesMaxCount);
+            
+                indexToHyperEdgeMappingsToAdd.Add(i, hypedEdgeByIndex);
+            }
+            
+            _mappings.Add((simplicesDimension, from.VerticesCount), indexToHyperEdgeMappings = indexToHyperEdgeMappingsToAdd.ToImmutableDictionary());
+        }
+        
+        return RestoreAllInnerRecursive(indexToHyperEdgeMappings, (Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, simplicesMaxCount, (uint)from.Sum(x => x), new HashSet<HyperEdge>(), -1);
     }
     
     /// <inheritdoc cref="HomogenousHypergraphRestorerBase{T}.RestoreAsync" />
@@ -231,7 +266,22 @@ public sealed class HomogenousHypergraphFromVerticesDegreesVectorGreedyRestorer:
         int simplicesDimension,
         CancellationToken cancellationToken = default)
     {
-        return RestoreAllInnerRecursiveAsync((Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension), (uint)from.Sum(x => x), new HashSet<HyperEdge>(), cancellationToken);
+        var simplicesMaxCount = BigIntegerExtensions.CombinationsCount(from.VerticesCount, simplicesDimension);
+        
+        if (!_mappings.TryGetValue((simplicesDimension, from.VerticesCount), out var indexToHyperEdgeMappings))
+        {
+            var indexToHyperEdgeMappingsToAdd = new Dictionary<int, HyperEdge>();
+            for (var i = 0; i < HomogenousHypergraph.GetSimplicesMaxCount(from.VerticesCount, simplicesDimension); ++i)
+            {
+                var hypedEdgeByIndex = HomogenousHypergraph.BitIndexToSimplex(i, simplicesDimension, from.VerticesCount, simplicesMaxCount);
+            
+                indexToHyperEdgeMappingsToAdd.Add(i, hypedEdgeByIndex);
+            }
+            
+            _mappings.Add((simplicesDimension, from.VerticesCount), indexToHyperEdgeMappings = indexToHyperEdgeMappingsToAdd.ToImmutableDictionary());
+        }
+        
+        return RestoreAllInnerRecursiveAsync(indexToHyperEdgeMappings, (Domain.VerticesDegreesVector)from.Clone(), simplicesDimension, simplicesMaxCount, (uint)from.Sum(x => x), new HashSet<HyperEdge>(), -1, cancellationToken);
     }
     
     #endregion
